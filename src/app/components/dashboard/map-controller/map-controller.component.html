@@ -1,0 +1,10 @@
+<mat-slide-toggle [formControl]="disableSelect">Arata doar pomii dintr-o categorie </mat-slide-toggle>
+<p>
+  <mat-form-field>
+    <mat-select placeholder="Alege categoria" [disabled]="!disableSelect.value">
+      <mat-option *ngFor="let c of categories; let i = index" [value]="1" (click)="onSelectCategory(c)">
+        {{c}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</p>

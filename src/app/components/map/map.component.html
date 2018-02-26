@@ -1,0 +1,18 @@
+<agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" (mapClick)="mapClicked($event)">
+  <agm-marker
+    *ngFor="let marker of trees; let i = index"
+    (markerClick)="markerClicked(marker,i, infoWindow)"
+    [latitude]="marker.coords.lat"
+    [longitude]="marker.coords.lng"
+    [iconUrl]="marker.icon">
+    <agm-info-window #infoWindow>
+      <img src="{{marker.img}}">
+      <h5><b>Latitudine:</b> {{marker.coords.lat}}</h5>
+      <h5><b>Longitudine:</b> {{marker.coords.lng}}</h5>
+      <h5><b>Categorie:</b> {{marker.category}}</h5>
+      <h4><b>INFO</b></h4>
+      <h5>{{marker.info}}</h5>
+    </agm-info-window>
+  </agm-marker>
+</agm-map>
+<button (click)="press()" type="button" name="button"></button>
