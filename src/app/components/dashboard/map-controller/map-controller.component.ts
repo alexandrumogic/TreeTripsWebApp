@@ -10,8 +10,10 @@ import { MapService } from '../../../services/map.service';
 })
 export class MapControllerComponent implements OnInit {
 
-  disableSelect = new FormControl(false);
+  showTreesFromACategory = new FormControl(false);
+  showAllTreesOnMap = new FormControl(true);
   categories: any[];
+  selectedCategory;
 
   constructor(private treesService: TreesService, private mapService: MapService) { }
 
@@ -23,10 +25,25 @@ export class MapControllerComponent implements OnInit {
     });
   }
 
-  onSelectCategory(c: any) {
-    this.mapService.setMarkersCategories(c);
+  showOnlyTreesFromACategory() {
+    if (this.selectedCategory) {
+      this.mapService.setMarkersCategories(this.selectedCategory);
+    }
+
+    this.showAllTreesOnMap.setValue(false);
   }
 
+  onSelectCategory(c: any) {
+    this.selectedCategory = c;
+    this.mapService.setMarkersCategories(this.selectedCategory);
+  }
 
-
+  showAllTrees() {
+    this.mapService.getAllTrees();
+    if (this.showTreesFromACategory.value == true) {
+      this.showTreesFromACategory.setValue(false);
+    } else {
+      this.showTreesFromACategory.setValue(true);
+    }
+  }
 }

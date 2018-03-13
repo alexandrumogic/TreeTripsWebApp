@@ -1,11 +1,20 @@
-
-  <mat-tab-group class="demo-tab-group" style="margin-top:20px;">
+  <mat-tab-group mat-stretch-tabs class="demo-tab-group" style="margin-top:20px;">
     <mat-tab label="Harta">
       <div class="demo-tab-content">
         <map-controller></map-controller>
       </div>
     </mat-tab>
     <mat-tab label="Traseu">
+      <mat-tab-group mat-stretch-tabs class="demo-tab-group" style="margin-top:1px;">
+        <mat-tab label="Generare traseu">
+          <route-controller></route-controller>
+        </mat-tab>
+        <mat-tab label="Trasee publice">
 
+        </mat-tab>
+        <mat-tab label="Trasee salvate">
+
+        </mat-tab>
+      </mat-tab-group>
     </mat-tab>
   </mat-tab-group>

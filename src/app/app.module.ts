@@ -11,6 +11,7 @@ import { MapComponent } from './components/map/map.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { MapControllerComponent } from './components/dashboard/map-controller/map-controller.component';
+import { RouteControllerComponent } from './components/dashboard/route-controller/route-controller.component';
 
 import { MapService } from './services/map.service';
 import { TreesService } from './services/trees.service';
@@ -57,7 +58,8 @@ import { CdkTableModule } from '@angular/cdk/table';
     MapComponent,
     NavbarComponent,
     DashboardComponent,
-    MapControllerComponent
+    MapControllerComponent,
+    RouteControllerComponent
   ],
   imports: [
     BrowserModule,
@@ -70,7 +72,10 @@ import { CdkTableModule } from '@angular/cdk/table';
     MatSlideToggleModule,
     ReactiveFormsModule,
     MatSelectModule,
-    MatTabsModule
+    MatTabsModule,
+    MatStepperModule,
+    MatIconModule,
+    MatInputModule
   ],
   providers: [ MapService, TreesService, RoutesService],
   bootstrap: [AppComponent]

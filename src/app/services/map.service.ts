@@ -1,23 +1,75 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
+import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { TreesService } from './trees.service';
+import { Trees, Tree } from '../classes/tree';
+import { Observable } from 'rxjs/Rx';
+import { ReplaySubject } from 'rxjs/ReplaySubject'
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/do';
 
 @Injectable()
-export class MapService {
+export class MapService implements OnInit{
 
-  constructor(private treesService: TreesService) { }
-
+  markers;
   markersCategory;
+  baseApiURL = 'http://localhost:3000/trees';
 
-  getMarkers() {
-    if (this.markersCategory == null)
-      return this.treesService.getTrees();
-    else
-      return this.treesService.getTreesByCategory(this.markersCategory);
+  constructor(private treesService: TreesService, private http: Http) {
+    this.markers = new BehaviorSubject<Trees[]>([]);
+    this.getTreesByCategory().subscribe(data => {
+          this.markers.next(Object.keys(data).map(function(key) {
+             return data[key];
+          }));
+        });
+  }
+
+  ngOnInit() {
+
+  }
+
+  getMarkers(): Observable<Tree[]> {
+
+    console.log("map.service / getMarkers() ");
+    return this.http.get(this.baseApiURL).map(res => <Tree[]>res.json()).do(data => this.markers.next(data));
   }
 
   setMarkersCategories(category: any) {
     console.log("Setting category to: " + category);
     this.markersCategory = category;
+    this.getTreesByCategory().subscribe(data => {
+          this.markers.next(Object.keys(data).map(function(key) {
+             return data[key];
+          }));
+        });
+  }
+
+  getAllTrees() {
+    this.getTrees().subscribe(data => {
+          this.markers.next(Object.keys(data).map(function(key) {
+             return data[key];
+          }));
+        });
+  }
+
+  getTrees() {
+    console.log("map.service / getTrees() ");
+    return this.http.get(this.baseApiURL).map(res => <Tree[]>res.json());
+  }
+
+  getTreesByCategory() {
+    if (!this.markersCategory) {
+      return this.http.get(this.baseApiURL).map(res => <Tree[]>res.json());
+    } else {
+      console.log("map.service.ts / getTreesByCategory: " + this.markersCategory);
+      let apiURL = this.baseApiURL+'/category/'+this.markersCategory;
+      return this.http.get(apiURL).map(res => res.json());
+    }
+  }
+
+  getCategories() {
+    let apiURL = this.baseApiURL+'/categories';
+    return this.http.get(apiURL).map(res => res.json());
   }
 
 }

@@ -3,26 +3,26 @@ import { TreesService } from '../../services/trees.service';
 import { MapService } from '../../services/map.service';
 import { Trees, Tree } from '../../classes/tree';
 declare var google: any;
+import { Observable } from 'rxjs/Rx';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
-export class MapComponent implements OnInit {
+export class MapComponent {
 
   lat: number = 45.807385;
   lng: number = 25.087588;
   zoom: number = 9;
   infoWindowOpened = null;
-  trees: Tree[];
+  trees;
 
-  constructor(private treesService: TreesService, private mapService: MapService) {}
-
-  ngOnInit() {
-    this.mapService.getMarkers().subscribe(data => {
+  constructor(private treesService: TreesService, private mapService: MapService) {
+    this.mapService.markers.subscribe(data => {
       this.trees = Object.keys(data).map(function(key) {
-         return data[key];
+            return data[key];
       });
     });
   }
@@ -46,14 +46,4 @@ export class MapComponent implements OnInit {
         console.log("Closing info opened.");
     }
   }
-
-  press() {
-    this.treesService.getTreesByCategory('fag').subscribe(data => {
-      this.trees = Object.keys(data).map(function(key) {
-         return data[key];
-      });
-    });
-  }
-
-
 }
