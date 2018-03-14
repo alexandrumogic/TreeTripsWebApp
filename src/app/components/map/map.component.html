@@ -12,6 +12,7 @@
       <h5><b>Categorie:</b> {{marker.category}}</h5>
       <h4><b>INFO</b></h4>
       <h5>{{marker.info}}</h5>
+      <button mat-button color="warn" (click)="markToVisit(marker); onMarkToVisitBtnClicked($event)">Viziteaza</button>
     </agm-info-window>
   </agm-marker>
 </agm-map>

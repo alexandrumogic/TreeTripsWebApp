@@ -13,10 +13,13 @@ export class MapService implements OnInit{
 
   markers;
   markersCategory;
+  markedToVisit;
   baseApiURL = 'http://localhost:3000/trees';
 
   constructor(private treesService: TreesService, private http: Http) {
     this.markers = new BehaviorSubject<Trees[]>([]);
+    this.markedToVisit = new BehaviorSubject<Trees[]>([]);
+
     this.getTreesByCategory().subscribe(data => {
           this.markers.next(Object.keys(data).map(function(key) {
              return data[key];
@@ -28,8 +31,15 @@ export class MapService implements OnInit{
 
   }
 
-  getMarkers(): Observable<Tree[]> {
+  getTreesMarkedToVisit(): Observable<Tree[]> {
+    return this.markedToVisit;
+  }
 
+  addTreeMarkedToVisit(tree: Tree) {
+    this.markedToVisit.next(tree);
+  }
+
+  getMarkers(): Observable<Tree[]> {
     console.log("map.service / getMarkers() ");
     return this.http.get(this.baseApiURL).map(res => <Tree[]>res.json()).do(data => this.markers.next(data));
   }

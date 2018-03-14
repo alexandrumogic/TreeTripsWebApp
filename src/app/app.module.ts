@@ -70,12 +70,15 @@ import { CdkTableModule } from '@angular/cdk/table';
     }),
     MatSliderModule,
     MatSlideToggleModule,
+    FormsModule,
     ReactiveFormsModule,
     MatSelectModule,
     MatTabsModule,
     MatStepperModule,
     MatIconModule,
-    MatInputModule
+    MatInputModule,
+    MatButtonModule,
+    MatListModule
   ],
   providers: [ MapService, TreesService, RoutesService],
   bootstrap: [AppComponent]

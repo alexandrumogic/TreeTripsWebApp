@@ -10,6 +10,8 @@
         <input matInput placeholder="longitudine" formControlName="longitudine" required>
       </mat-form-field>
       <div>
+        <button mat-button color="primary">Marcheaza</button>
+        <button mat-button color="warn" (click)="reset()">Reseteaza</button>
         <button mat-button matStepperNext>Pasul urmator</button>
       </div>
     </form>
@@ -31,7 +33,12 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Pomi de vizitat</ng-template>
-    Lista pomi
+    <mat-list>
+      <mat-list-item *ngFor="let tree of treesMarkedToVisit">
+      <mat-icon svgIcon="artar"></mat-icon>
+        {{tree.category}}
+      </mat-list-item>
+    </mat-list>
     <div>
       <button mat-button matStepperPrevious>Pasul precedent</button>
       <button mat-button matStepperNext>Pasul urmator</button>
