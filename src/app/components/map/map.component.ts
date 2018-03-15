@@ -35,6 +35,7 @@ export class MapComponent {
   }
 
   mapClicked($event: any) {
+    this.mapService.pointClickedOnMap.next($event);
     this.closeInfoWindow();
   }
 
@@ -62,6 +63,7 @@ export class MapComponent {
     } else {
       console.log("map.component / markToVisit() : Tree already marked to visit, removing;");
       this.treesMarkedToVisit.splice(marker, 1);
+      this.mapService.markedToVisit.next(this.treesMarkedToVisit);
       console.log(this.treesMarkedToVisit);
     }
   }

@@ -5,6 +5,7 @@ import { Trees, Tree } from '../classes/tree';
 import { Observable } from 'rxjs/Rx';
 import { ReplaySubject } from 'rxjs/ReplaySubject'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
@@ -14,11 +15,15 @@ export class MapService implements OnInit{
   markers;
   markersCategory;
   markedToVisit;
+  pointClickedOnMap;
+  allowClickedMap;
   baseApiURL = 'http://localhost:3000/trees';
 
   constructor(private treesService: TreesService, private http: Http) {
     this.markers = new BehaviorSubject<Trees[]>([]);
     this.markedToVisit = new BehaviorSubject<Trees[]>([]);
+    this.pointClickedOnMap = new Subject;
+    this.allowClickedMap = false;
 
     this.getTreesByCategory().subscribe(data => {
           this.markers.next(Object.keys(data).map(function(key) {
@@ -31,13 +36,6 @@ export class MapService implements OnInit{
 
   }
 
-  getTreesMarkedToVisit(): Observable<Tree[]> {
-    return this.markedToVisit;
-  }
-
-  addTreeMarkedToVisit(tree: Tree) {
-    this.markedToVisit.next(tree);
-  }
 
   getMarkers(): Observable<Tree[]> {
     console.log("map.service / getMarkers() ");

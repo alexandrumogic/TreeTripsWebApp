@@ -10,6 +10,9 @@ import { DomSanitizer } from "@angular/platform-browser";
 export class AppComponent {
   title = 'app';
   public constructor (private domSanitizer: DomSanitizer, public matIconRegistry: MatIconRegistry) {
-    matIconRegistry.addSvgIcon('artar', domSanitizer.bypassSecurityTrustResourceUrl('/assets/img/trees-categories/artar.png'));
+    matIconRegistry.addSvgIcon('artar', domSanitizer.bypassSecurityTrustResourceUrl('/assets/img/trees-categories/svg/artar.svg'));
+    matIconRegistry.addSvgIcon('fag', domSanitizer.bypassSecurityTrustResourceUrl('/assets/img/trees-categories/svg/fag.svg'));
+    matIconRegistry.addSvgIcon('frasin', domSanitizer.bypassSecurityTrustResourceUrl('/assets/img/trees-categories/svg/frasin.svg'));
+    matIconRegistry.addSvgIcon('pin', domSanitizer.bypassSecurityTrustResourceUrl('/assets/img/trees-categories/svg/pin.svg'));
   }
 }
