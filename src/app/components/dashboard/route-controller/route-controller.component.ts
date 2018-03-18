@@ -13,23 +13,16 @@ export class RouteControllerComponent implements OnInit {
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
-  categories: any[];
-
-  ar = "artar";
-
+  categories: any[] = [];
+  treesCounterToVisit = [];
   treesMarkedToVisit;
-  treesCounterToVisit;
 
   constructor(private _formBuilder: FormBuilder, private _mapService: MapService) {
-
-    this.treesCounterToVisit = new Map();
 
     this._mapService.getCategories().subscribe(data => {
       this.categories = Object.keys(data).map(function(key) {
          return data[key];
       });
-
-      this.createTreesCounterToVisit();
     });
 
     this._mapService.markedToVisit.subscribe(data => {
@@ -37,7 +30,27 @@ export class RouteControllerComponent implements OnInit {
             return data[key];
       });
 
-      this.calculateHowManyTreesWillVisit();
+      var categoryOccurence = Object.keys(data).map(function(key) {
+            return data[key].category;
+      });
+
+      var countsCategoryOccurence = {};
+      this.treesCounterToVisit = [];
+
+      for (var i = 0; i< categoryOccurence.length; i++)
+      {
+        var num = categoryOccurence[i];
+        countsCategoryOccurence[num] = countsCategoryOccurence[num] ? countsCategoryOccurence[num] + 1 : 1;
+      }
+
+      for (var i = 0; i < this.categories.length; i++)
+      {
+        var result = countsCategoryOccurence[this.categories[i]];
+        if (typeof result !== "undefined")
+        {
+          this.treesCounterToVisit.push([this.categories[i], result]);
+        }
+      }
     });
   }
 
@@ -50,32 +63,6 @@ export class RouteControllerComponent implements OnInit {
       latitudine: ['', Validators.required],
       longitudine: ['', Validators.required]
     });
-  }
-
-  createTreesCounterToVisit() {
-
-    for (var i = 0; i< this.categories.length; i++)
-    {
-      this.treesCounterToVisit.set(this.categories[i], 0);
-    }
-
-    console.log(this.treesCounterToVisit);
-  }
-
-  calculateHowManyTreesWillVisit() {
-    // if (this.treesMarkedToVisit.length > 0)
-    // {
-    //   this.treesMarkedToVisit.forEach(function(tree) {
-    //     console.log("Tree:");
-    //     console.log(tree);
-    //
-    //     for (var key of this.treesCounterToVisit.keys()) {
-    //       if (key == tree.category) {
-    //
-    //       }
-    //     }
-    //   })
-    // }
   }
 
   resetStartPoint() {

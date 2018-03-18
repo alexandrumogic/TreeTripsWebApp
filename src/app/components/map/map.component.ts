@@ -50,9 +50,6 @@ export class MapComponent {
   }
 
   markToVisit(marker: Tree) {
-    console.log("Marker form: ");
-    console.log(marker);
-
     var findIfMarked = this.checkCoordsAndReturnTree(marker.coords);
 
     if (findIfMarked == null) {
@@ -62,25 +59,23 @@ export class MapComponent {
       console.log(this.treesMarkedToVisit);
     } else {
       console.log("map.component / markToVisit() : Tree already marked to visit, removing;");
-      this.treesMarkedToVisit.splice(marker, 1);
+      var index = this.treesMarkedToVisit.indexOf(marker);
+      this.treesMarkedToVisit.splice(index, 1);
       this.mapService.markedToVisit.next(this.treesMarkedToVisit);
       console.log(this.treesMarkedToVisit);
     }
   }
 
   onMarkToVisitBtnClicked(event) {
-    if(event.srcElement.innerHTML ==='Viziteaza' ){
-      //// perform add action
-      event.srcElement.innerHTML="Nu mai vizita";
+    if(event.srcElement.innerHTML === 'Viziteaza' ){
+      event.srcElement.innerHTML = 'Nu mai vizita';
     } else if(event.srcElement.innerHTML ==='Nu mai vizita'){
-      //// perform remove action
-      event.srcElement.innerHTML="Viziteaza";
+      event.srcElement.innerHTML = 'Viziteaza';
     }
   }
 
   markerClicked(marker: Tree, index: number, infoWindow): void {
     console.log("Clicked marker at index " + index + " / "+ marker.coords.lat + " / " + marker.coords.lng);
-    console.log(marker);
     if (this.infoWindowOpened == infoWindow)
         return;
     this.closeInfoWindow();

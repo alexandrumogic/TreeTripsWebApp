@@ -35,9 +35,11 @@
   <mat-step>
     <ng-template matStepLabel>Pomi de vizitat</ng-template>
     <mat-list>
-      <mat-list-item *ngFor="let tree of treesMarkedToVisit">
-      <mat-icon svgIcon="{{ar}}"></mat-icon>
-        {{tree.category}}
+      <mat-list-item *ngFor="let tree of treesCounterToVisit">
+
+          <mat-icon svgIcon="{{tree[0]}}"></mat-icon>
+            {{tree[1] + " "}} {{tree[0]}}
+
       </mat-list-item>
     </mat-list>
     <div>
