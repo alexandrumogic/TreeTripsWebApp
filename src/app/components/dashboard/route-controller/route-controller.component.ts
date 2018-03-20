@@ -31,6 +31,7 @@ export class RouteControllerComponent implements OnInit {
       });
 
       var categoryOccurence = Object.keys(data).map(function(key) {
+            console.log(data[key].hasOwnProperty('category'));
             return data[key].category;
       });
 

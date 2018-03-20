@@ -18,9 +18,16 @@ export class MapComponent {
   zoom: number = 10;
   infoWindowOpened = null;
   trees;
+  halts;
   treesMarkedToVisit;
 
   constructor(private treesService: TreesService, private mapService: MapService) {
+    this.mapService.halts.subscribe(data => {
+      this.halts = Object.keys(data).map(function(key) {
+            return data[key];
+      });
+    });
+
     this.mapService.markers.subscribe(data => {
       this.trees = Object.keys(data).map(function(key) {
             return data[key];

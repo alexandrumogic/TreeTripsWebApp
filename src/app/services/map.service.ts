@@ -13,6 +13,7 @@ import 'rxjs/add/operator/do';
 export class MapService implements OnInit{
 
   markers;
+  halts;
   markersCategory;
   markedToVisit;
   pointClickedOnMap;
@@ -21,6 +22,7 @@ export class MapService implements OnInit{
 
   constructor(private treesService: TreesService, private http: Http) {
     this.markers = new BehaviorSubject<Trees[]>([]);
+    this.halts = new BehaviorSubject<Object[]>([]);
     this.markedToVisit = new BehaviorSubject<Trees[]>([]);
     this.pointClickedOnMap = new Subject;
     this.allowClickedMap = false;
@@ -30,10 +32,34 @@ export class MapService implements OnInit{
              return data[key];
           }));
         });
+
+    this.getHalts().subscribe(data => {
+          this.halts.next(Object.keys(data).map(function(key) {
+              return data[key];
+          }));
+        });
   }
 
   ngOnInit() {
 
+  }
+
+  getHalts() {
+    var url = 'http://localhost:3000/halts';
+    console.log("map.service / getHalts() ");
+    return this.http.get(url).map(res => res.json());
+  }
+
+  setHaltsVisibleOnMap(status: boolean) {
+    if (status) {
+      this.getHalts().subscribe(data => {
+            this.halts.next(Object.keys(data).map(function(key) {
+                return data[key];
+            }));
+          });
+    } else {
+      this.halts.next([]);
+    }
   }
 
 

@@ -1,5 +1,8 @@
 <div class="container">
 <section class="example-section">
+  <mat-slide-toggle [formControl]="showHaltsControl" (click)="showHalts()">Arata popasurile pe harta </mat-slide-toggle>
+</section>
+<section class="example-section">
   <mat-slide-toggle [formControl]="showAllTreesOnMap" (click)="showAllTrees()">Arata toti pomii pe harta </mat-slide-toggle>
 </section>
   <mat-slide-toggle [formControl]="showTreesFromACategory" (click)="showOnlyTreesFromACategory()">Arata doar pomii dintr-o categorie </mat-slide-toggle>

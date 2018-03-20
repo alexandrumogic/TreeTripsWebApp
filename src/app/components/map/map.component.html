@@ -15,4 +15,17 @@
       <button mat-button color="warn" (click)="markToVisit(marker); onMarkToVisitBtnClicked($event)">Viziteaza</button>
     </agm-info-window>
   </agm-marker>
+  <agm-marker
+    *ngFor="let halt of halts; let i = index"
+    [latitude]="halt.coords.lat"
+    [longitude]="halt.coords.lng"
+    [iconUrl]="halt.icon">
+    <agm-info-window #infoWindow>
+      <h5><b>Latitudine:</b> {{halt.coords.lat}}</h5>
+      <h5><b>Longitudine:</b> {{halt.coords.lng}}</h5>
+      <h4><b>INFO</b></h4>
+      <h5>{{halt.info}}</h5>
+      <button mat-button color="warn" (click)="markToVisit(halt); onMarkToVisitBtnClicked($event)">Viziteaza</button>
+    </agm-info-window>
+  </agm-marker>
 </agm-map>

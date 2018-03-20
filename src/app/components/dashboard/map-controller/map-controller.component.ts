@@ -12,6 +12,7 @@ export class MapControllerComponent implements OnInit {
 
   showTreesFromACategory = new FormControl(false);
   showAllTreesOnMap = new FormControl(true);
+  showHaltsControl = new FormControl(true);
   categories: any[];
   selectedCategory;
 
@@ -23,6 +24,14 @@ export class MapControllerComponent implements OnInit {
          return data[key];
       });
     });
+  }
+
+  showHalts() {
+    if (this.showHaltsControl.value == true) {
+      this.mapService.setHaltsVisibleOnMap(false);
+    } else {
+      this.mapService.setHaltsVisibleOnMap(true);
+    }
   }
 
   showOnlyTreesFromACategory() {
