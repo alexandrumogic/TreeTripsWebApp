@@ -15,7 +15,9 @@ export class RouteControllerComponent implements OnInit {
   secondFormGroup: FormGroup;
   categories: any[] = [];
   treesCounterToVisit = [];
+  haltsCounterToVisit = [];
   treesMarkedToVisit;
+  haltsOccurence = [];
 
   constructor(private _formBuilder: FormBuilder, private _mapService: MapService) {
 
@@ -35,9 +37,24 @@ export class RouteControllerComponent implements OnInit {
             return data[key].category;
       });
 
-      var countsCategoryOccurence = {};
-      this.treesCounterToVisit = [];
+      this.haltsOccurence = [];
 
+      this.haltsOccurence = Object.keys(data).map(function(key) {
+            if (!data[key].hasOwnProperty('category'))
+            {
+              return data[key];
+            }
+      });
+
+      console.log("Halt occurence:");
+      console.log(this.haltsOccurence);
+
+      var countsCategoryOccurence = {};
+      var countHaltsOccurence = {};
+      this.treesCounterToVisit = [];
+      this.haltsCounterToVisit = [];
+
+      // categories
       for (var i = 0; i< categoryOccurence.length; i++)
       {
         var num = categoryOccurence[i];
@@ -52,6 +69,17 @@ export class RouteControllerComponent implements OnInit {
           this.treesCounterToVisit.push([this.categories[i], result]);
         }
       }
+
+      // halts
+      for (var i = 0; i< this.haltsOccurence.length; i++)
+      {
+        var result = this.haltsOccurence[i];
+        if (typeof result !== "undefined")
+        {
+          this.haltsCounterToVisit.push(this.haltsOccurence[i]);
+        }
+      }
+
     });
   }
 
@@ -78,6 +106,7 @@ export class RouteControllerComponent implements OnInit {
     this._mapService.pointClickedOnMap.first().subscribe(data => {
        this.firstFormGroup.controls['latitudine'].setValue(data.coords.lat);
        this.firstFormGroup.controls['longitudine'].setValue(data.coords.lng);
+       this._mapService.setOrigin({lat: data.coords.lat, lng: data.coords.lng});
     })
   }
 
@@ -85,7 +114,12 @@ export class RouteControllerComponent implements OnInit {
     this._mapService.pointClickedOnMap.first().subscribe(data => {
        this.secondFormGroup.controls['latitudine'].setValue(data.coords.lat);
        this.secondFormGroup.controls['longitudine'].setValue(data.coords.lng);
+       this._mapService.setDestination({lat: data.coords.lat, lng: data.coords.lng});
     })
+  }
+
+  generateRoute() {
+    this._mapService.calculateRoute();
   }
 
 

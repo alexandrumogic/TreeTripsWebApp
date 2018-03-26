@@ -1,11 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
 
 import { AgmCoreModule } from '@agm/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { MapComponent } from './components/map/map.component';
@@ -52,6 +53,7 @@ import {
   MatStepperModule
 } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk/table';
+import { DirectionsMapDirective } from './components/map/directions-map.directive';
 
 @NgModule({
   declarations: [
@@ -60,10 +62,12 @@ import { CdkTableModule } from '@angular/cdk/table';
     NavbarComponent,
     DashboardComponent,
     MapControllerComponent,
-    RouteControllerComponent
+    RouteControllerComponent,
+    DirectionsMapDirective
   ],
   imports: [
     BrowserModule,
+    CommonModule,
     BrowserAnimationsModule,
     HttpModule,
     HttpClientModule,

@@ -35,31 +35,31 @@
   <mat-step>
     <ng-template matStepLabel>Pomi de vizitat</ng-template>
     <mat-list>
+            Ai selectat {{ treesCounterToVisit.length }} pomi
       <mat-list-item *ngFor="let tree of treesCounterToVisit">
-
-          <mat-icon svgIcon="{{tree[0]}}"></mat-icon>
-            {{tree[1] + " "}} {{tree[0]}}
-
+          <mat-icon svgIcon="{{tree[0]}}"></mat-icon> {{tree[1] + " "}} {{tree[0]}}
       </mat-list-item>
     </mat-list>
     <div>
-      <button mat-button matStepperPrevious>Pasul precedent</button>
-      <button mat-button matStepperNext>Pasul urmator</button>
+      <button mat-button color="primary" matStepperNext>Pasul urmator</button>
     </div>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Popasuri</ng-template>
-    Lista popasuri
+    <mat-list>
+      Ai selectat {{ haltsCounterToVisit.length }} popasuri
+      <mat-list-item *ngFor="let halt of haltsCounterToVisit">
+        <mat-icon svgIcon="camp1"></mat-icon>
+      </mat-list-item>
+    </mat-list>
     <div>
-      <button mat-button matStepperPrevious>Pasul precedent</button>
-      <button mat-button matStepperNext>Pasul urmator</button>
+      <button mat-button color="primary" matStepperNext>Pasul urmator</button>
     </div>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Generare traseu</ng-template>
     <div>
-      <button mat-button matStepperPrevious>Pasul precedent</button>
-      <button mat-button matStepperNext>Pasul urmator</button>
+      <button mat-button color="primary" (click)="generateRoute()">Genereaza</button>
     </div>
   </mat-step>
 </mat-vertical-stepper>

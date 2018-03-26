@@ -10,8 +10,6 @@ import { RouteControllerComponent } from './route-controller/route-controller.co
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
-
   ngOnInit() {
   }
 

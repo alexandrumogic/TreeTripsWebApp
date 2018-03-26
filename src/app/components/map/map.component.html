@@ -28,4 +28,5 @@
       <button mat-button color="warn" (click)="markToVisit(halt); onMarkToVisitBtnClicked($event)">Viziteaza</button>
     </agm-info-window>
   </agm-marker>
+  <directionsMap [origin]="origin" [destination]="destination" [waypoints]="waypoints"></directionsMap>
 </agm-map>

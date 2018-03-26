@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TreesService } from '../../services/trees.service';
 import { MapService } from '../../services/map.service';
 import { Trees, Tree } from '../../classes/tree';
+import { GoogleMapsAPIWrapper } from '@agm/core/services/google-maps-api-wrapper';
+import { DirectionsMapDirective } from './directions-map.directive';
 declare var google: any;
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
@@ -19,9 +21,15 @@ export class MapComponent {
   infoWindowOpened = null;
   trees;
   halts;
-  treesMarkedToVisit;
+  pointsMarkedToVisit;
+  origin: Object = { lat: 45.807385, lng: 25.087588 };
+  destination: Object = { lat: 45.499460, lng: 25.583886 };
+  waypoints = [];
+
+  @ViewChild(DirectionsMapDirective) vc: DirectionsMapDirective;
 
   constructor(private treesService: TreesService, private mapService: MapService) {
+
     this.mapService.halts.subscribe(data => {
       this.halts = Object.keys(data).map(function(key) {
             return data[key];
@@ -35,9 +43,19 @@ export class MapComponent {
     });
 
     this.mapService.markedToVisit.subscribe(data => {
-      this.treesMarkedToVisit = Object.keys(data).map(function(key) {
+      this.pointsMarkedToVisit = Object.keys(data).map(function(key) {
             return data[key];
       });
+    });
+
+    this.mapService.originSubject.subscribe(data => {
+      console.log(data);
+      this.origin = data;
+    });
+
+    this.mapService.destinationSubject.subscribe(data => {
+      console.log(data);
+      this.destination = data;
     });
   }
 
@@ -46,30 +64,29 @@ export class MapComponent {
     this.closeInfoWindow();
   }
 
-  checkCoordsAndReturnTree(coords) {
-    for (var i = 0; i < this.treesMarkedToVisit.length; i++)
-      if ((this.treesMarkedToVisit[i].coords.lat == coords.lat) && (this.treesMarkedToVisit[i].coords.lng == coords.lng)){
-        console.log("Found tree: ");
-        console.log(this.treesMarkedToVisit[i]);
-        return this.treesMarkedToVisit[i];
+  checkCoordsAndReturnPoint(coords) {
+    for (var i = 0; i < this.pointsMarkedToVisit.length; i++)
+      if ((this.pointsMarkedToVisit[i].coords.lat == coords.lat) && (this.pointsMarkedToVisit[i].coords.lng == coords.lng)){
+        console.log(this.pointsMarkedToVisit[i]);
+        return this.pointsMarkedToVisit[i];
       }
     return null;
   }
 
-  markToVisit(marker: Tree) {
-    var findIfMarked = this.checkCoordsAndReturnTree(marker.coords);
+  markToVisit(marker) {
+    var findIfMarked = this.checkCoordsAndReturnPoint(marker.coords);
 
     if (findIfMarked == null) {
-      this.treesMarkedToVisit.push(marker);
-      this.mapService.markedToVisit.next(this.treesMarkedToVisit);
+      this.pointsMarkedToVisit.push(marker);
+      this.mapService.markedToVisit.next(this.pointsMarkedToVisit);
       console.log("map.component / markToVisit() : Tree marked to visit;");
-      console.log(this.treesMarkedToVisit);
+      console.log(this.pointsMarkedToVisit);
     } else {
       console.log("map.component / markToVisit() : Tree already marked to visit, removing;");
-      var index = this.treesMarkedToVisit.indexOf(marker);
-      this.treesMarkedToVisit.splice(index, 1);
-      this.mapService.markedToVisit.next(this.treesMarkedToVisit);
-      console.log(this.treesMarkedToVisit);
+      var index = this.pointsMarkedToVisit.indexOf(marker);
+      this.pointsMarkedToVisit.splice(index, 1);
+      this.mapService.markedToVisit.next(this.pointsMarkedToVisit);
+      console.log(this.pointsMarkedToVisit);
     }
   }
 

@@ -1,5 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { TreesService } from './trees.service';
 import { Trees, Tree } from '../classes/tree';
 import { Observable } from 'rxjs/Rx';
@@ -10,19 +11,26 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
 @Injectable()
-export class MapService implements OnInit{
-
+export class MapService implements OnInit {
   markers;
   halts;
   markersCategory;
   markedToVisit;
   pointClickedOnMap;
   allowClickedMap;
+  routeResult;
+  originSubject;
+  destinationSubject;
+  origin = {lat: "", lng: ""};
+  destination = {lat: "", lng: ""};
   baseApiURL = 'http://localhost:3000/trees';
 
-  constructor(private treesService: TreesService, private http: Http) {
+  constructor(private treesService: TreesService, private http: Http, private httpClient: HttpClient) {
+    this.routeResult = new Subject;
     this.markers = new BehaviorSubject<Trees[]>([]);
     this.halts = new BehaviorSubject<Object[]>([]);
+    this.originSubject = new BehaviorSubject<Object>({});
+    this.destinationSubject = new BehaviorSubject<Object>({});
     this.markedToVisit = new BehaviorSubject<Trees[]>([]);
     this.pointClickedOnMap = new Subject;
     this.allowClickedMap = false;
@@ -42,6 +50,16 @@ export class MapService implements OnInit{
 
   ngOnInit() {
 
+  }
+
+  setOrigin(coords) {
+    this.origin = coords;
+    this.originSubject.next(coords);
+  }
+
+  setDestination(coords) {
+    this.destination = coords;
+    this.destinationSubject.next(coords);
   }
 
   getHalts() {
@@ -104,6 +122,21 @@ export class MapService implements OnInit{
   getCategories() {
     let apiURL = this.baseApiURL+'/categories';
     return this.http.get(apiURL).map(res => res.json());
+  }
+
+  calculateRoute() {
+    console.log("Calculating");
+    var url = 'http://localhost:3000/routes';
+    this.httpClient.get(url, {
+      params: {
+        sPtLat: this.origin.lat,
+        sPtLng: this.origin.lng,
+        ePtLat: this.destination.lat,
+        ePtLng: this.destination.lng
+      }
+    }).subscribe(data => {  console.log(data); });
+    this.routeResult.next({});
+
   }
 
 }
