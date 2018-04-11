@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TreesService } from '../../../services/trees.service';
 import { MapService } from '../../../services/map.service';
 
@@ -13,17 +13,93 @@ export class MapControllerComponent implements OnInit {
   showTreesFromACategory = new FormControl(false);
   showAllTreesOnMap = new FormControl(true);
   showHaltsControl = new FormControl(true);
+  coordsFormGroup: FormGroup;
+  categoryFormGroup: FormGroup;
+  treeDetailsGroup: FormGroup;
+  treeDescriptionFormGroup: FormGroup;
   categories: any[];
   selectedCategory;
+  imageFile;
 
-  constructor(private treesService: TreesService, private mapService: MapService) { }
+  constructor(private _formBuilder: FormBuilder, private treesService: TreesService, private mapService: MapService) { }
 
   ngOnInit() {
+
+    this.treeDetailsGroup = this._formBuilder.group({
+      latitudine: ['', Validators.required],
+      longitudine: ['', Validators.required],
+      category: ['', Validators.required],
+      description: ['', Validators.required],
+      file: ['', Validators.required]
+    });
+
+    this.coordsFormGroup = this._formBuilder.group({
+      latitudine: ['', Validators.required],
+      longitudine: ['', Validators.required]
+    });
+
+    this.categoryFormGroup = this._formBuilder.group({
+      newCategory: [''],
+      treeDescription: ['']
+    });
+
     this.treesService.getCategories().subscribe(data => {
       this.categories = Object.keys(data).map(function(key) {
          return data[key];
       });
     });
+  }
+
+  detectFiles(event) {
+
+    this.imageFile = event.target.files[0];
+    console.log(this.imageFile);
+
+  }
+
+  submitTreeToDatabase() {
+    var treeData = {
+      lat: null,
+      lng: null,
+      category: null,
+      description: null,
+      file: null
+    }
+
+    treeData.lat = this.treeDetailsGroup.controls['latitudine'].value;
+    treeData.lng = this.treeDetailsGroup.controls['longitudine'].value;
+    treeData.category = this.treeDetailsGroup.controls['category'].value
+    treeData.description = this.treeDetailsGroup.controls['description'].value
+    treeData.file = this.imageFile;
+
+    this.mapService.addTree(treeData);
+  }
+
+  resetCoordPoint() {
+    this.coordsFormGroup.reset();
+  }
+
+  succededInGettingUserLocation(pos) {
+       this.treeDetailsGroup.controls['latitudine'].setValue(pos.coords.latitude);
+       this.treeDetailsGroup.controls['longitudine'].setValue(pos.coords.longitude);
+       // to do: store it somewhere
+  }
+
+  failedInGettingUserLocation() {
+    window.alert("Nu am putut detecta locatia actuala!");
+  }
+
+  getUserLocation() {
+    if(window.navigator.geolocation){
+      window.navigator.geolocation.getCurrentPosition(this.succededInGettingUserLocation.bind(this), this.failedInGettingUserLocation);
+    } else {
+      window.alert("Nu avem permisiune de a detecta locatia.");
+    }
+  }
+
+  resetUserLocation() {
+    this.treeDetailsGroup.controls['latitudine'].reset();
+    this.treeDetailsGroup.controls['longitudine'].reset();
   }
 
   showHalts() {
@@ -45,6 +121,16 @@ export class MapControllerComponent implements OnInit {
   onSelectCategory(c: any) {
     this.selectedCategory = c;
     this.mapService.setMarkersCategories(this.selectedCategory);
+  }
+
+  onSelectCategoryToPlant(c: any) {
+    console.log(c);
+    this.treeDetailsGroup.controls['category'].setValue(c);
+
+  }
+
+  resetDescription() {
+    this.treeDetailsGroup.controls['description'].reset();
   }
 
   showAllTrees() {

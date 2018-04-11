@@ -1,5 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { HttpClient } from '@angular/common/http';
 import { TreesService } from './trees.service';
 import { Trees, Tree } from '../classes/tree';
@@ -50,6 +51,33 @@ export class MapService implements OnInit {
 
   ngOnInit() {
 
+  }
+
+  addTree(treeData) {
+    var url = 'http://localhost:3000/trees';
+    console.log("map.service / addTree() ");
+    console.log(treeData.lat);
+    console.log(treeData.lng);
+    console.log(treeData.file);
+
+    let input = new FormData();
+    input.append('lat', treeData.lat);
+    input.append('lng', treeData.lng);
+    input.append('file', treeData.file);
+    input.append('category', treeData.category);
+    input.append('description', treeData.description);
+
+    // let headers = new Headers({ 'Content-Type': 'application/json' });
+    // let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(url, input).subscribe(
+        res => {
+          console.log(res);
+        },
+        err => {
+          console.log("Error occured");
+        }
+      );
   }
 
   setOrigin(coords) {
@@ -134,8 +162,8 @@ export class MapService implements OnInit {
         ePtLat: this.destination.lat,
         ePtLng: this.destination.lng
       }
-    }).subscribe(data => {  console.log(data); });
-    this.routeResult.next({});
+    }).subscribe(data => { this.routeResult.next(data); console.log(data); });
+    // this.routeResult.next({});
 
   }
 

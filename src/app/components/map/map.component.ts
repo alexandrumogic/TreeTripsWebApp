@@ -17,7 +17,7 @@ export class MapComponent {
 
   lat: number = 45.517284;
   lng: number = 24.423181;
-  zoom: number = 10;
+  zoom: number = 11;
   infoWindowOpened = null;
   trees;
   halts;

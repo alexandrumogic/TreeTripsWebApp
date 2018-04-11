@@ -72,7 +72,7 @@ import { DirectionsMapDirective } from './components/map/directions-map.directiv
     HttpModule,
     HttpClientModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCCvOH0fbWoRqlwuwGGl-sNZJuO9tKcq2M'
+      apiKey: 'AIzaSyBLfs4ab6ODh4tuJkR7r38lhEaw_kKc_ZI'
     }),
     MatSliderModule,
     MatSlideToggleModule,
@@ -84,7 +84,8 @@ import { DirectionsMapDirective } from './components/map/directions-map.directiv
     MatIconModule,
     MatInputModule,
     MatButtonModule,
-    MatListModule
+    MatListModule,
+    MatExpansionModule
   ],
   providers: [ MapService, TreesService, RoutesService],
   bootstrap: [AppComponent]
