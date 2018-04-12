@@ -54,6 +54,8 @@ import {
 } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk/table';
 import { DirectionsMapDirective } from './components/map/directions-map.directive';
+import { AccountComponent } from './components/dashboard/account-controller/account/account.component';
+import { UserService } from './services/user.service';
 
 @NgModule({
   declarations: [
@@ -63,7 +65,8 @@ import { DirectionsMapDirective } from './components/map/directions-map.directiv
     DashboardComponent,
     MapControllerComponent,
     RouteControllerComponent,
-    DirectionsMapDirective
+    DirectionsMapDirective,
+    AccountComponent
   ],
   imports: [
     BrowserModule,
@@ -85,9 +88,12 @@ import { DirectionsMapDirective } from './components/map/directions-map.directiv
     MatInputModule,
     MatButtonModule,
     MatListModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatCardModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
-  providers: [ MapService, TreesService, RoutesService],
+  providers: [ MapService, TreesService, RoutesService, UserService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

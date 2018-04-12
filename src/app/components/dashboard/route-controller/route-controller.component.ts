@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MapService } from '../../../services/map.service';
+import { UserService } from '../../../services/user.service';
 import 'rxjs/add/operator/first';
 
 @Component({
@@ -11,21 +12,15 @@ import 'rxjs/add/operator/first';
 export class RouteControllerComponent implements OnInit {
 
   isLinear = false;
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
+  generateRouteFormGroup: FormGroup;
   categories: any[] = [];
   treesCounterToVisit = [];
   haltsCounterToVisit = [];
   treesMarkedToVisit;
   haltsOccurence = [];
+  isUserAuthenticated: boolean;
 
-  constructor(private _formBuilder: FormBuilder, private _mapService: MapService) {
-
-    this._mapService.getCategories().subscribe(data => {
-      this.categories = Object.keys(data).map(function(key) {
-         return data[key];
-      });
-    });
+  constructor(private _formBuilder: FormBuilder, private _mapService: MapService, private _userService: UserService) {
 
     this._mapService.markedToVisit.subscribe(data => {
       this.treesMarkedToVisit = Object.keys(data).map(function(key) {
@@ -84,36 +79,49 @@ export class RouteControllerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.firstFormGroup = this._formBuilder.group({
-      latitudine: ['', Validators.required],
-      longitudine: ['', Validators.required]
+
+    this._userService.checkIfUserIsAuthenticated().subscribe(value => {
+      this.isUserAuthenticated = value;
     });
-    this.secondFormGroup = this._formBuilder.group({
-      latitudine: ['', Validators.required],
-      longitudine: ['', Validators.required]
+
+    this._mapService.getCategories().subscribe(data => {
+      this.categories = Object.keys(data).map(function(key) {
+         return data[key];
+      });
     });
+
+    this.generateRouteFormGroup = this._formBuilder.group({
+      latStr: ['', Validators.required],
+      lngStr: ['', Validators.required],
+      latEnd: ['', Validators.required],
+      lngEnd: ['', Validators.required],
+      dtPick: ['',                    ]
+    });
+
   }
 
   resetStartPoint() {
-    this.firstFormGroup.reset();
+    this.generateRouteFormGroup.controls['latStr'].reset();
+    this.generateRouteFormGroup.controls['lngStr'].reset();
   }
 
   resetEndPoint() {
-    this.secondFormGroup.reset();
+    this.generateRouteFormGroup.controls['latEnd'].reset();
+    this.generateRouteFormGroup.controls['lngEnd'].reset();
   }
 
   markStartPoint() {
     this._mapService.pointClickedOnMap.first().subscribe(data => {
-       this.firstFormGroup.controls['latitudine'].setValue(data.coords.lat);
-       this.firstFormGroup.controls['longitudine'].setValue(data.coords.lng);
+       this.generateRouteFormGroup.controls['latStr'].setValue(data.coords.lat);
+       this.generateRouteFormGroup.controls['lngStr'].setValue(data.coords.lng);
        this._mapService.setOrigin({lat: data.coords.lat, lng: data.coords.lng});
     })
   }
 
   markEndPoint() {
     this._mapService.pointClickedOnMap.first().subscribe(data => {
-       this.secondFormGroup.controls['latitudine'].setValue(data.coords.lat);
-       this.secondFormGroup.controls['longitudine'].setValue(data.coords.lng);
+       this.generateRouteFormGroup.controls['latEnd'].setValue(data.coords.lat);
+       this.generateRouteFormGroup.controls['lngEnd'].setValue(data.coords.lng);
        this._mapService.setDestination({lat: data.coords.lat, lng: data.coords.lng});
     })
   }
@@ -121,7 +129,5 @@ export class RouteControllerComponent implements OnInit {
   generateRoute() {
     this._mapService.calculateRoute();
   }
-
-
 
 }

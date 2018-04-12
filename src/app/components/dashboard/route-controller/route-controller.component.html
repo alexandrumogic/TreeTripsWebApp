@@ -1,13 +1,13 @@
 
 <mat-vertical-stepper [linear]="isLinear" #stepper="matVerticalStepper">
-  <mat-step [stepControl]="firstFormGroup">
-    <form [formGroup]="firstFormGroup">
+  <mat-step [stepControl]="generateRouteFormGroup">
+    <form [formGroup]="generateRouteFormGroup">
       <ng-template matStepLabel>Punct de plecare</ng-template>
       <mat-form-field>
-        <input matInput placeholder="latitudine" formControlName="latitudine" required>
+        <input matInput placeholder="latitudine" formControlName="latStr" required>
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="longitudine" formControlName="longitudine" required>
+        <input matInput placeholder="longitudine" formControlName="lngStr" required>
       </mat-form-field>
       <div>
         <button mat-button color="primary"(click)="markStartPoint()">Marcheaza</button>
@@ -16,14 +16,14 @@
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="secondFormGroup">
-    <form [formGroup]="secondFormGroup">
+  <mat-step [stepControl]="generateRouteFormGroup">
+    <form [formGroup]="generateRouteFormGroup">
       <ng-template matStepLabel>Punct destinatie</ng-template>
       <mat-form-field>
-        <input matInput placeholder="latitudine" formControlName="latitudine" required>
+        <input matInput placeholder="latitudine" formControlName="latEnd" required>
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="longitudine" formControlName="longitudine" required>
+        <input matInput placeholder="longitudine" formControlName="lngEnd" required>
       </mat-form-field>
       <div>
         <button mat-button color="primary"(click)="markEndPoint()">Marcheaza</button>
@@ -60,6 +60,20 @@
     <ng-template matStepLabel>Generare traseu</ng-template>
     <div>
       <button mat-button color="primary" (click)="generateRoute()">Genereaza</button>
+    </div>
+  </mat-step>
+  <mat-step *ngIf="isUserAuthenticated">
+    <ng-template matStepLabel>Salvare / publicare traseu</ng-template>
+    <div>
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="Alege data">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div>
+      <button mat-button color="primary" >Publica</button>
+      <button mat-button color="primary" >Salveaza</button>
     </div>
   </mat-step>
 </mat-vertical-stepper>
