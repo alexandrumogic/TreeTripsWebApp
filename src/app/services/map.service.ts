@@ -164,7 +164,6 @@ export class MapService implements OnInit {
       }
     }).subscribe(data => { this.routeResult.next(data); console.log(data); });
     // this.routeResult.next({});
-
   }
 
 }

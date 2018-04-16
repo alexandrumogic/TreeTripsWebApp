@@ -1,7 +1,7 @@
 
 <mat-vertical-stepper [linear]="isLinear" #stepper="matVerticalStepper">
-  <mat-step [stepControl]="generateRouteFormGroup">
-    <form [formGroup]="generateRouteFormGroup">
+  <mat-step [stepControl]="routeFormGroup">
+    <form [formGroup]="routeFormGroup">
       <ng-template matStepLabel>Punct de plecare</ng-template>
       <mat-form-field>
         <input matInput placeholder="latitudine" formControlName="latStr" required>
@@ -16,8 +16,8 @@
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="generateRouteFormGroup">
-    <form [formGroup]="generateRouteFormGroup">
+  <mat-step [stepControl]="routeFormGroup">
+    <form [formGroup]="routeFormGroup">
       <ng-template matStepLabel>Punct destinatie</ng-template>
       <mat-form-field>
         <input matInput placeholder="latitudine" formControlName="latEnd" required>
@@ -73,7 +73,7 @@
     </div>
     <div>
       <button mat-button color="primary" >Publica</button>
-      <button mat-button color="primary" >Salveaza</button>
+      <button mat-button (click)="saveRoute()" color="primary" >Salveaza</button>
     </div>
   </mat-step>
 </mat-vertical-stepper>

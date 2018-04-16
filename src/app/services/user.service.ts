@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { MapCoordonates } from '../classes/map-coordonates';
+import { Route } from '../classes/route';
+
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -57,6 +60,15 @@ export class UserService {
 
   checkIfUserIsAuthenticated() {
     return this.isUserAuthenticated.asObservable();
+  }
+
+  saveUserRoute(route: Route) {
+    var url = this.baseApiURL + "/routes";
+
+    return this.http.post(url, { token: this.userToken, route: route })
+      .subscribe(result => {
+        console.log(result);
+      });
   }
 
 }

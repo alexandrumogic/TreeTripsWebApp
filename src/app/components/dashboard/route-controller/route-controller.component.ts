@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MapService } from '../../../services/map.service';
 import { UserService } from '../../../services/user.service';
+import { Route } from '../../../classes/route';
+import { MapCoordonates } from '../../../classes/map-coordonates';
 import 'rxjs/add/operator/first';
 
 @Component({
@@ -12,7 +14,7 @@ import 'rxjs/add/operator/first';
 export class RouteControllerComponent implements OnInit {
 
   isLinear = false;
-  generateRouteFormGroup: FormGroup;
+  routeFormGroup: FormGroup;
   categories: any[] = [];
   treesCounterToVisit = [];
   haltsCounterToVisit = [];
@@ -90,7 +92,7 @@ export class RouteControllerComponent implements OnInit {
       });
     });
 
-    this.generateRouteFormGroup = this._formBuilder.group({
+    this.routeFormGroup = this._formBuilder.group({
       latStr: ['', Validators.required],
       lngStr: ['', Validators.required],
       latEnd: ['', Validators.required],
@@ -101,33 +103,62 @@ export class RouteControllerComponent implements OnInit {
   }
 
   resetStartPoint() {
-    this.generateRouteFormGroup.controls['latStr'].reset();
-    this.generateRouteFormGroup.controls['lngStr'].reset();
+    this.routeFormGroup.controls['latStr'].reset();
+    this.routeFormGroup.controls['lngStr'].reset();
   }
 
   resetEndPoint() {
-    this.generateRouteFormGroup.controls['latEnd'].reset();
-    this.generateRouteFormGroup.controls['lngEnd'].reset();
+    this.routeFormGroup.controls['latEnd'].reset();
+    this.routeFormGroup.controls['lngEnd'].reset();
   }
 
   markStartPoint() {
     this._mapService.pointClickedOnMap.first().subscribe(data => {
-       this.generateRouteFormGroup.controls['latStr'].setValue(data.coords.lat);
-       this.generateRouteFormGroup.controls['lngStr'].setValue(data.coords.lng);
+       this.routeFormGroup.controls['latStr'].setValue(data.coords.lat);
+       this.routeFormGroup.controls['lngStr'].setValue(data.coords.lng);
        this._mapService.setOrigin({lat: data.coords.lat, lng: data.coords.lng});
     })
   }
 
   markEndPoint() {
     this._mapService.pointClickedOnMap.first().subscribe(data => {
-       this.generateRouteFormGroup.controls['latEnd'].setValue(data.coords.lat);
-       this.generateRouteFormGroup.controls['lngEnd'].setValue(data.coords.lng);
+       this.routeFormGroup.controls['latEnd'].setValue(data.coords.lat);
+       this.routeFormGroup.controls['lngEnd'].setValue(data.coords.lng);
        this._mapService.setDestination({lat: data.coords.lat, lng: data.coords.lng});
     })
   }
 
   generateRoute() {
     this._mapService.calculateRoute();
+  }
+
+  saveRoute() {
+
+    console.log(this.routeFormGroup.controls['latStr'].value);
+
+    let origin = new MapCoordonates(this.routeFormGroup.controls['latStr'].value, this.routeFormGroup.controls['lngStr'].value);
+    let destin = new MapCoordonates(this.routeFormGroup.controls['latEnd'].value, this.routeFormGroup.controls['lngEnd'].value);
+    let waypoints = this.transformPointsToCoords();
+    let date = new Date().getDate();
+    let trees = this.treesCounterToVisit.length;
+    let halts = this.haltsCounterToVisit.length;
+    let distance = "";
+
+    console.log(origin);
+
+    let route = new Route(origin, destin, waypoints, date, trees, halts, distance);
+
+    this._userService.saveUserRoute(route);
+  }
+
+  transformPointsToCoords() {
+    let arr = [];
+
+    this.treesMarkedToVisit.forEach(function(data) {
+      arr.push(new MapCoordonates(data.coords.lat, data.coords.lng));
+    })
+
+    return arr;
   }
 
 }
