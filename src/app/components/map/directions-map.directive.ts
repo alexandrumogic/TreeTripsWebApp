@@ -49,11 +49,11 @@ export class DirectionsMapDirective {
       directions.directionsDisplay = new google.maps.DirectionsRenderer;
       directions.directionsDisplay.setMap(map);
 
-      this.displayRoute(this.origin, this.destination, this.route, directions.directionsService, directions.directionsDisplay, map);
+      this.displayRoute(this.origin, this.destination, this.route, directions.directionsService, directions.directionsDisplay, map, this.mapService);
     })
   }
 
-  displayRoute(origin, destination, route, service, display, map): void {
+  displayRoute(origin, destination, route, service, display, map, mapService): void {
     var myWaypoints = [];
 
     for (var i = 0; i < this.waypoints.length; i++) {
@@ -80,8 +80,6 @@ export class DirectionsMapDirective {
     //       f: this.destination.lat}
     // };
 
-
-
       service.route({
         origin: origin,
         destination: destination,
@@ -100,6 +98,7 @@ export class DirectionsMapDirective {
 
           console.log("Total distance: " + totaldistance + " km");
           display.setDirections(response);
+          mapService.setDistance(totaldistance);
         } else {
           alert('Could not display directions due to: ' + status);
         }
@@ -115,7 +114,7 @@ export class DirectionsMapDirective {
 
   calculateRoute(): void {
     this._gmapsApi.getNativeMap().then(map => {
-      this.displayRoute(this.origin, this.destination, this.route, this.directions.directionsService, this.directions.directionsDisplay, map);
+      this.displayRoute(this.origin, this.destination, this.route, this.directions.directionsService, this.directions.directionsDisplay, map, this.mapService);
     });
   }
 

@@ -56,6 +56,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { DirectionsMapDirective } from './components/map/directions-map.directive';
 import { AccountComponent } from './components/dashboard/account-controller/account/account.component';
 import { UserService } from './services/user.service';
+import { RoutesSavedComponent } from './components/dashboard/route-controller/routes-saved/routes-saved.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +67,8 @@ import { UserService } from './services/user.service';
     MapControllerComponent,
     RouteControllerComponent,
     DirectionsMapDirective,
-    AccountComponent
+    AccountComponent,
+    RoutesSavedComponent
   ],
   imports: [
     BrowserModule,
@@ -91,7 +93,8 @@ import { UserService } from './services/user.service';
     MatExpansionModule,
     MatCardModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatTableModule
   ],
   providers: [ MapService, TreesService, RoutesService, UserService ],
   bootstrap: [AppComponent]

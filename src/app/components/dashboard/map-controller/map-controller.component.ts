@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TreesService } from '../../../services/trees.service';
 import { MapService } from '../../../services/map.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'map-controller',
@@ -18,12 +19,18 @@ export class MapControllerComponent implements OnInit {
   treeDetailsGroup: FormGroup;
   treeDescriptionFormGroup: FormGroup;
   categories: any[];
+  isUserAuthenticated: boolean;
+  userToken;
   selectedCategory;
   imageFile;
 
-  constructor(private _formBuilder: FormBuilder, private treesService: TreesService, private mapService: MapService) { }
+  constructor(private _formBuilder: FormBuilder, private treesService: TreesService, private mapService: MapService, private _userService: UserService) { }
 
   ngOnInit() {
+
+    this._userService.checkIfUserIsAuthenticated().subscribe(value => {
+      this.isUserAuthenticated = value;
+    });
 
     this.treeDetailsGroup = this._formBuilder.group({
       latitudine: ['', Validators.required],
@@ -71,8 +78,9 @@ export class MapControllerComponent implements OnInit {
     treeData.category = this.treeDetailsGroup.controls['category'].value
     treeData.description = this.treeDetailsGroup.controls['description'].value
     treeData.file = this.imageFile;
+    var token = this._userService.getUserToken();
 
-    this.mapService.addTree(treeData);
+    this.mapService.addTree(treeData, token);
   }
 
   resetCoordPoint() {

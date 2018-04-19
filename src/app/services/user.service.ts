@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, RequestOptions, Headers } from '@angular/http';
+import { Http, Response, RequestOptions, Headers, URLSearchParams } from '@angular/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { MapCoordonates } from '../classes/map-coordonates';
 import { Route } from '../classes/route';
+import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/operator/map';
 
@@ -14,10 +15,14 @@ export class UserService {
   private userToken: string = null;
   private userName;
   private isUserAuthenticated;
+  private userSavedRoutes;
+  private userTrees;
 
   constructor(private http: Http) {
     this.isUserAuthenticated = new BehaviorSubject<boolean>(false);
     this.userName = new BehaviorSubject<string>("");
+    this.userSavedRoutes = new BehaviorSubject<any>([]);
+    this.userTrees = new BehaviorSubject<any>([]);
   }
 
   createUserAccount(name, email, password) {
@@ -29,16 +34,20 @@ export class UserService {
     var url = this.baseApiURL + "/login"
     return this.http.post(url, { email: email, password: password }).map(res => res.json())
           .subscribe(result => {
-            // var resultText = result.text();
+
             var name = result.name;
             var token = result.token;
 
             if (token == "User sau parola incorecte. Incercati din nou.") {
               window.alert("User sau parola incorecte. Incercati din nou.");
             } else {
+              console.log("loggedin");
               this.userToken = token;
               this.userName.next(name);
               this.isUserAuthenticated.next(true);
+              this._getUserSavedRoutes();
+              this._getUserAddedTrees();
+
             }
       });
   }
@@ -64,11 +73,39 @@ export class UserService {
 
   saveUserRoute(route: Route) {
     var url = this.baseApiURL + "/routes";
-
     return this.http.post(url, { token: this.userToken, route: route })
       .subscribe(result => {
         console.log(result);
       });
+  }
+
+  private _getUserSavedRoutes() {
+    var url = this.baseApiURL + "/routes";
+    console.log(this.userToken);
+    this.http.get(url, { params: { token: this.userToken } }).map(res => res.json())
+        .subscribe(result => {
+          this.userSavedRoutes.next(result);
+        });
+  }
+
+  public getUserRoutes(): Observable<any> {
+    return this.userSavedRoutes.asObservable();
+  }
+
+  public getUserToken() {
+    return this.userToken;
+  }
+
+  public getUserTrees(): Observable<any> {
+    return this.userTrees.asObservable();
+  }
+
+  private _getUserAddedTrees() {
+      var url = this.baseApiURL + "/trees";
+      this.http.get(url, { params: { token: this.userToken } }).map(res => res.json())
+          .subscribe(result => {
+            this.userTrees.next(result);
+          });
   }
 
 }

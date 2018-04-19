@@ -20,8 +20,11 @@
 </div>
 </mat-tab>
 <mat-tab label="Planteaza un pom">
-
-  <mat-vertical-stepper [linear]="isLinear" #stepper="matVerticalStepper">
+  <div *ngIf="!isUserAuthenticated" class="row justify-content-center align-self-center vertical-center">
+        <img src="/assets/img/various-trees.png" alt="">
+        <p>Te rugam sa te autentifici in sectiunea CONT pentru a planta un pom.</p>
+  </div>
+  <mat-vertical-stepper *ngIf="isUserAuthenticated" [linear]="isLinear" #stepper="matVerticalStepper">
     <mat-step [stepControl]="treeDetailsGroup">
       <form [formGroup]="treeDetailsGroup">
         <ng-template matStepLabel>Inregistreaza coordonatele</ng-template>
@@ -78,7 +81,6 @@
         <ng-template matStepLabel>Incarca fotografie</ng-template>
           <input type="file" (change)="detectFiles($event)">
         <div>
-          <button mat-button color="primary"(click)="uploadImage()">Incarca</button>
           <button mat-button matStepperNext>Pasul urmator</button>
         </div>
       </form>

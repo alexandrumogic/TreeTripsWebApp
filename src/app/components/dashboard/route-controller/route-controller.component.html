@@ -1,79 +1,90 @@
 
-<mat-vertical-stepper [linear]="isLinear" #stepper="matVerticalStepper">
-  <mat-step [stepControl]="routeFormGroup">
-    <form [formGroup]="routeFormGroup">
-      <ng-template matStepLabel>Punct de plecare</ng-template>
-      <mat-form-field>
-        <input matInput placeholder="latitudine" formControlName="latStr" required>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput placeholder="longitudine" formControlName="lngStr" required>
-      </mat-form-field>
-      <div>
-        <button mat-button color="primary"(click)="markStartPoint()">Marcheaza</button>
-        <button mat-button color="warn" (click)="resetStartPoint()">Reseteaza</button>
-        <button mat-button matStepperNext>Pasul urmator</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step [stepControl]="routeFormGroup">
-    <form [formGroup]="routeFormGroup">
-      <ng-template matStepLabel>Punct destinatie</ng-template>
-      <mat-form-field>
-        <input matInput placeholder="latitudine" formControlName="latEnd" required>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput placeholder="longitudine" formControlName="lngEnd" required>
-      </mat-form-field>
-      <div>
-        <button mat-button color="primary"(click)="markEndPoint()">Marcheaza</button>
-        <button mat-button color="warn" (click)="resetEndPoint()">Reseteaza</button>
-        <button mat-button matStepperNext>Pasul urmator</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step>
-    <ng-template matStepLabel>Pomi de vizitat</ng-template>
-    <mat-list>
-            Ai selectat {{ treesCounterToVisit.length }} pomi
-      <mat-list-item *ngFor="let tree of treesCounterToVisit">
-          <mat-icon svgIcon="{{tree[0]}}"></mat-icon> {{tree[1] + " "}} {{tree[0]}}
-      </mat-list-item>
-    </mat-list>
-    <div>
-      <button mat-button color="primary" matStepperNext>Pasul urmator</button>
-    </div>
-  </mat-step>
-  <mat-step>
-    <ng-template matStepLabel>Popasuri</ng-template>
-    <mat-list>
-      Ai selectat {{ haltsCounterToVisit.length }} popasuri
-      <mat-list-item *ngFor="let halt of haltsCounterToVisit">
-        <mat-icon svgIcon="camp1"></mat-icon>
-      </mat-list-item>
-    </mat-list>
-    <div>
-      <button mat-button color="primary" matStepperNext>Pasul urmator</button>
-    </div>
-  </mat-step>
-  <mat-step>
-    <ng-template matStepLabel>Generare traseu</ng-template>
-    <div>
-      <button mat-button color="primary" (click)="generateRoute()">Genereaza</button>
-    </div>
-  </mat-step>
-  <mat-step *ngIf="isUserAuthenticated">
-    <ng-template matStepLabel>Salvare / publicare traseu</ng-template>
-    <div>
-      <mat-form-field>
-        <input matInput [matDatepicker]="picker" placeholder="Alege data">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-    </div>
-    <div>
-      <button mat-button color="primary" >Publica</button>
-      <button mat-button (click)="saveRoute()" color="primary" >Salveaza</button>
-    </div>
-  </mat-step>
-</mat-vertical-stepper>
+  <mat-tab-group mat-stretch-tabs class="demo-tab-group" style="margin-top:1px;">
+    <mat-tab label="Generare traseu">
+      <mat-vertical-stepper [linear]="isLinear" #stepper="matVerticalStepper">
+        <mat-step [stepControl]="routeFormGroup">
+          <form [formGroup]="routeFormGroup">
+            <ng-template matStepLabel>Punct de plecare</ng-template>
+            <mat-form-field>
+              <input matInput placeholder="latitudine" formControlName="latStr" required>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="longitudine" formControlName="lngStr" required>
+            </mat-form-field>
+            <div>
+              <button mat-button color="primary"(click)="markStartPoint()">Marcheaza</button>
+              <button mat-button color="warn" (click)="resetStartPoint()">Reseteaza</button>
+              <button mat-button matStepperNext>Pasul urmator</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="routeFormGroup">
+          <form [formGroup]="routeFormGroup">
+            <ng-template matStepLabel>Punct destinatie</ng-template>
+            <mat-form-field>
+              <input matInput placeholder="latitudine" formControlName="latEnd" required>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput placeholder="longitudine" formControlName="lngEnd" required>
+            </mat-form-field>
+            <div>
+              <button mat-button color="primary"(click)="markEndPoint()">Marcheaza</button>
+              <button mat-button color="warn" (click)="resetEndPoint()">Reseteaza</button>
+              <button mat-button matStepperNext>Pasul urmator</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Pomi de vizitat</ng-template>
+          <mat-list>
+                  Ai selectat {{ treesCounterToVisit.length }} pomi
+            <mat-list-item *ngFor="let tree of treesCounterToVisit">
+                <mat-icon svgIcon="{{tree[0]}}"></mat-icon> {{tree[1] + " "}} {{tree[0]}}
+            </mat-list-item>
+          </mat-list>
+          <div>
+            <button mat-button color="primary" matStepperNext>Pasul urmator</button>
+          </div>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Popasuri</ng-template>
+          <mat-list>
+            Ai selectat {{ haltsCounterToVisit.length }} popasuri
+            <mat-list-item *ngFor="let halt of haltsCounterToVisit">
+              <mat-icon svgIcon="camp1"></mat-icon>
+            </mat-list-item>
+          </mat-list>
+          <div>
+            <button mat-button color="primary" matStepperNext>Pasul urmator</button>
+          </div>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Generare traseu</ng-template>
+          <div>
+            <button mat-button color="primary" (click)="generateRoute()">Genereaza</button>
+          </div>
+        </mat-step>
+        <mat-step *ngIf="isUserAuthenticated">
+          <ng-template matStepLabel>Salvare / publicare traseu</ng-template>
+          <div>
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker" placeholder="Alege data">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div>
+            <button mat-button color="primary" >Publica</button>
+            <button mat-button (click)="saveRoute()" color="primary" >Salveaza</button>
+          </div>
+        </mat-step>
+      </mat-vertical-stepper>
+
+    </mat-tab>
+    <mat-tab label="Trasee publice">
+
+    </mat-tab>
+    <mat-tab label="Trasee salvate">
+        <routes-saved></routes-saved>
+    </mat-tab>
+  </mat-tab-group>

@@ -22,6 +22,7 @@ export class MapService implements OnInit {
   routeResult;
   originSubject;
   destinationSubject;
+  distance;
   origin = {lat: "", lng: ""};
   destination = {lat: "", lng: ""};
   baseApiURL = 'http://localhost:3000/trees';
@@ -35,6 +36,7 @@ export class MapService implements OnInit {
     this.markedToVisit = new BehaviorSubject<Trees[]>([]);
     this.pointClickedOnMap = new Subject;
     this.allowClickedMap = false;
+    this.distance = new BehaviorSubject<any>(0);
 
     this.getTreesByCategory().subscribe(data => {
           this.markers.next(Object.keys(data).map(function(key) {
@@ -53,7 +55,16 @@ export class MapService implements OnInit {
 
   }
 
-  addTree(treeData) {
+  setDistance(distance) {
+    console.log("map.service | setDistance()");
+    this.distance.next(distance);
+  }
+
+  getDistance(): Observable<any> {
+    return this.distance.asObservable();
+  }
+
+  addTree(treeData, userToken) {
     var url = 'http://localhost:3000/trees';
     console.log("map.service / addTree() ");
     console.log(treeData.lat);
@@ -66,9 +77,7 @@ export class MapService implements OnInit {
     input.append('file', treeData.file);
     input.append('category', treeData.category);
     input.append('description', treeData.description);
-
-    // let headers = new Headers({ 'Content-Type': 'application/json' });
-    // let options = new RequestOptions({ headers: headers });
+    input.append('token', userToken);
 
     return this.http.post(url, input).subscribe(
         res => {
@@ -163,7 +172,6 @@ export class MapService implements OnInit {
         ePtLng: this.destination.lng
       }
     }).subscribe(data => { this.routeResult.next(data); console.log(data); });
-    // this.routeResult.next({});
   }
 
 }

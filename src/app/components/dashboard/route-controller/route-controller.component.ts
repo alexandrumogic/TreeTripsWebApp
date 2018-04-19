@@ -4,6 +4,8 @@ import { MapService } from '../../../services/map.service';
 import { UserService } from '../../../services/user.service';
 import { Route } from '../../../classes/route';
 import { MapCoordonates } from '../../../classes/map-coordonates';
+import { RoutesSavedComponent } from './routes-saved/routes-saved.component';
+
 import 'rxjs/add/operator/first';
 
 @Component({
@@ -21,6 +23,7 @@ export class RouteControllerComponent implements OnInit {
   treesMarkedToVisit;
   haltsOccurence = [];
   isUserAuthenticated: boolean;
+  distance;
 
   constructor(private _formBuilder: FormBuilder, private _mapService: MapService, private _userService: UserService) {
 
@@ -82,6 +85,10 @@ export class RouteControllerComponent implements OnInit {
 
   ngOnInit() {
 
+    this._mapService.getDistance().subscribe(distance => {
+      this.distance = distance;
+    });
+
     this._userService.checkIfUserIsAuthenticated().subscribe(value => {
       this.isUserAuthenticated = value;
     });
@@ -133,20 +140,13 @@ export class RouteControllerComponent implements OnInit {
   }
 
   saveRoute() {
-
-    console.log(this.routeFormGroup.controls['latStr'].value);
-
-    let origin = new MapCoordonates(this.routeFormGroup.controls['latStr'].value, this.routeFormGroup.controls['lngStr'].value);
+    let origin: MapCoordonates = new MapCoordonates(this.routeFormGroup.controls['latStr'].value, this.routeFormGroup.controls['lngStr'].value);
     let destin = new MapCoordonates(this.routeFormGroup.controls['latEnd'].value, this.routeFormGroup.controls['lngEnd'].value);
     let waypoints = this.transformPointsToCoords();
-    let date = new Date().getDate();
-    let trees = this.treesCounterToVisit.length;
-    let halts = this.haltsCounterToVisit.length;
-    let distance = "";
-
-    console.log(origin);
-
-    let route = new Route(origin, destin, waypoints, date, trees, halts, distance);
+    let currentDate = new Date();
+    let dateTime = currentDate.getDate() + "/" + (currentDate.getMonth()+1) + "/" + currentDate.getFullYear() + " "
+                  + currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds();
+    let route = new Route(origin, destin, waypoints, dateTime, this.treesCounterToVisit.length, this.haltsCounterToVisit.length, this.distance);
 
     this._userService.saveUserRoute(route);
   }

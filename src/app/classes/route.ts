@@ -1,28 +1,22 @@
 import { MapCoordonates } from '../classes/map-coordonates';
 
-
 export class Route {
-
-  route: {
-  	origin: MapCoordonates,
-  	destination: MapCoordonates,
-  	waypoints: MapCoordonates[]
-  };
-
-  info: {
-  	date: String,
-  	trees: Number,
-  	halts: Number,
-  	distance: String
-  };
+  
+  origin: MapCoordonates;
+  destination: MapCoordonates;
+  waypoints: MapCoordonates[];
+  date: string;
+  trees: number;
+  halts: number;
+  distance: string;
 
   constructor(origin, destination, waypoints, date, trees, halts, distance) {
-  	this.route.origin = origin;
-  	this.route.destination = destination;
-  	this.route.waypoints = waypoints;
-  	this.info.date = date;
-  	this.info.trees = trees;
-  	this.info.halts = halts;
-  	this.info.distance = distance;
+  	this.origin = origin;
+  	this.destination = destination;
+    this.waypoints = waypoints;
+  	this.date = date;
+  	this.trees = trees;
+  	this.halts = halts;
+  	this.distance = distance;
   }
 }
