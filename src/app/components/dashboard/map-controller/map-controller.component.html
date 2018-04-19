@@ -1,5 +1,8 @@
-<mat-tab-group mat-stretch-tabs class="demo-tab-group" style="margin-top:1px;">
+<mat-tab-group mat-stretch-tabs class="demo-tab-group" style="margin-top:1px;" dynamicHeight="true">
   <mat-tab label="Optiuni">
+    <ng-template mat-tab-label>
+      <i class="material-icons">dashboard</i> Optiuni
+    </ng-template>
 <div class="container">
 <section class="example-section">
   <mat-slide-toggle [formControl]="showHaltsControl" (click)="showHalts()">Arata popasurile pe harta </mat-slide-toggle>
@@ -20,6 +23,9 @@
 </div>
 </mat-tab>
 <mat-tab label="Planteaza un pom">
+  <ng-template mat-tab-label>
+    <i class="material-icons">nature</i> Planteaza un pom
+  </ng-template>
   <div *ngIf="!isUserAuthenticated" class="row justify-content-center align-self-center vertical-center">
         <img src="/assets/img/various-trees.png" alt="">
         <p>Te rugam sa te autentifici in sectiunea CONT pentru a planta un pom.</p>

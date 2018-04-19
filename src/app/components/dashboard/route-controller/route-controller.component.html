@@ -1,6 +1,9 @@
 
   <mat-tab-group mat-stretch-tabs class="demo-tab-group" style="margin-top:1px;">
     <mat-tab label="Generare traseu">
+      <ng-template mat-tab-label>
+        <i class="material-icons">near_me</i> Generare traseu
+      </ng-template>
       <mat-vertical-stepper [linear]="isLinear" #stepper="matVerticalStepper">
         <mat-step [stepControl]="routeFormGroup">
           <form [formGroup]="routeFormGroup">
@@ -82,9 +85,15 @@
 
     </mat-tab>
     <mat-tab label="Trasee publice">
+      <ng-template mat-tab-label>
+        <i class="material-icons">share</i> Trasee publice
+      </ng-template>
 
     </mat-tab>
     <mat-tab label="Trasee salvate">
+      <ng-template mat-tab-label>
+        <i class="material-icons">beenhere</i> Trasee salvate
+      </ng-template>
         <routes-saved></routes-saved>
     </mat-tab>
   </mat-tab-group>

@@ -1,11 +1,20 @@
   <mat-tab-group mat-stretch-tabs class="demo-tab-group" style="margin-top:20px;">
     <mat-tab label="Harta">
+      <ng-template mat-tab-label>
+        <mat-icon>map</mat-icon> Harta
+      </ng-template>
       <map-controller></map-controller>
     </mat-tab>
     <mat-tab label="Traseu">
+      <ng-template mat-tab-label>
+        <i class="material-icons">directions_walk</i> Traseu
+      </ng-template>
       <route-controller></route-controller>
     </mat-tab>
     <mat-tab label="Cont">
+      <ng-template mat-tab-label>
+        <i class="material-icons">account_box</i> Cont
+      </ng-template>
       <div class="demo-tab-content">
           <account></account>
       </div>
