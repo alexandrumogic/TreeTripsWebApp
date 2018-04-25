@@ -73,7 +73,12 @@ export class UserService {
 
   saveUserRoute(route: Route) {
     var url = this.baseApiURL + "/routes";
-    return this.http.post(url, { token: this.userToken, route: route })
+    return this.http.post(url, { token: this.userToken, route: route });
+  }
+
+  makeRoutePublic(route: Route) {
+    var url = "http://localhost:3000/routes/public";
+    return this.http.post(url, { route: route })
       .subscribe(result => {
         console.log(result);
       });

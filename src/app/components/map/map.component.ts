@@ -73,8 +73,14 @@ export class MapComponent {
     return null;
   }
 
-  markToVisit(marker) {
+  markToVisit(marker, event) {
     var findIfMarked = this.checkCoordsAndReturnPoint(marker.coords);
+
+    if(event.srcElement.innerHTML == 'Viziteaza' ){
+      event.srcElement.innerHTML = 'Nu mai vizita';
+    } else if(event.srcElement.innerHTML == 'Nu mai vizita'){
+      event.srcElement.innerHTML = 'Viziteaza';
+    }
 
     if (findIfMarked == null) {
       this.pointsMarkedToVisit.push(marker);
@@ -87,14 +93,6 @@ export class MapComponent {
       this.pointsMarkedToVisit.splice(index, 1);
       this.mapService.markedToVisit.next(this.pointsMarkedToVisit);
       console.log(this.pointsMarkedToVisit);
-    }
-  }
-
-  onMarkToVisitBtnClicked(event) {
-    if(event.srcElement.innerHTML === 'Viziteaza' ){
-      event.srcElement.innerHTML = 'Nu mai vizita';
-    } else if(event.srcElement.innerHTML ==='Nu mai vizita'){
-      event.srcElement.innerHTML = 'Viziteaza';
     }
   }
 

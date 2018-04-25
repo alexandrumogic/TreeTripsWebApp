@@ -6,13 +6,21 @@
     [longitude]="marker.coords.lng"
     [iconUrl]="marker.icon">
     <agm-info-window #infoWindow>
-      <img src="{{marker.img}}">
-      <h5><b>Latitudine:</b> {{marker.coords.lat}}</h5>
-      <h5><b>Longitudine:</b> {{marker.coords.lng}}</h5>
-      <h5><b>Categorie:</b> {{marker.category}}</h5>
-      <h4><b>INFO</b></h4>
-      <h5>{{marker.info}}</h5>
-      <button mat-button color="warn" (click)="markToVisit(marker); onMarkToVisitBtnClicked($event)">Viziteaza</button>
+      <div class="row">
+        <div class="col-md-4">
+          <img src="{{marker.img}}">
+        </div>
+        <div class="col-md-5">
+          <h4><b>INFO</b></h4>
+          <h5>{{marker.info}}</h5>
+        </div>
+        <div class="col-md-3">
+          <h5><b>Latitudine:</b> {{marker.coords.lat}}</h5>
+          <h5><b>Longitudine:</b> {{marker.coords.lng}}</h5>
+          <h5><b>Categorie:</b> {{marker.category}}</h5>
+          <button mat-raised-button color="warn" (click)="markToVisit(marker, $event)" style="margin-top: 10px;">Viziteaza</button>
+        </div>
+      </div>
     </agm-info-window>
   </agm-marker>
   <agm-marker

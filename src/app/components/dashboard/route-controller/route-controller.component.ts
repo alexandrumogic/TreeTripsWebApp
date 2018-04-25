@@ -5,6 +5,7 @@ import { UserService } from '../../../services/user.service';
 import { Route } from '../../../classes/route';
 import { MapCoordonates } from '../../../classes/map-coordonates';
 import { RoutesSavedComponent } from './routes-saved/routes-saved.component';
+import { RoutesPublicComponent } from './routes-public/routes-public.component';
 
 import 'rxjs/add/operator/first';
 
@@ -24,6 +25,7 @@ export class RouteControllerComponent implements OnInit {
   haltsOccurence = [];
   isUserAuthenticated: boolean;
   distance;
+  makeRoutePublic: boolean = false;
 
   constructor(private _formBuilder: FormBuilder, private _mapService: MapService, private _userService: UserService) {
 
@@ -140,6 +142,7 @@ export class RouteControllerComponent implements OnInit {
   }
 
   saveRoute() {
+
     let origin: MapCoordonates = new MapCoordonates(this.routeFormGroup.controls['latStr'].value, this.routeFormGroup.controls['lngStr'].value);
     let destin = new MapCoordonates(this.routeFormGroup.controls['latEnd'].value, this.routeFormGroup.controls['lngEnd'].value);
     let waypoints = this.transformPointsToCoords();
@@ -148,7 +151,17 @@ export class RouteControllerComponent implements OnInit {
                   + currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds();
     let route = new Route(origin, destin, waypoints, dateTime, this.treesCounterToVisit.length, this.haltsCounterToVisit.length, this.distance);
 
-    this._userService.saveUserRoute(route);
+    if (this.makeRoutePublic) {
+      this._userService.makeRoutePublic(route);
+    }
+
+    this._userService.saveUserRoute(route).subscribe(result => {
+            if (result.status == 200) {
+              window.alert("Traseu salvat cu success!");
+            } else {
+              window.alert("Traseul nu a putut fi salvat, incearca din nou.");
+            }
+      });
   }
 
   transformPointsToCoords() {

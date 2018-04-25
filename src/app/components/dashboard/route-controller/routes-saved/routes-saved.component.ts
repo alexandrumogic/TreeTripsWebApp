@@ -10,7 +10,7 @@ export class RoutesSavedComponent implements OnInit {
 
   isUserAuthenticated: boolean;
   userRoutes = [];
-  displayedColumns = ['date', 'distance', 'trees', 'halts'];
+  displayedColumns = ['date', 'distance', 'trees', 'halts', 'action'];
   dataSource = [];
 
   constructor(private _userService: UserService) { }

@@ -18,3 +18,13 @@ html, body {
   font-size: 8pt;
   float: right;
 }
+
+body > app-root > div > div > div.col-md-8 > app-map > agm-map > div.agm-map-container-inner.sebm-google-map-container-inner > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div {
+  max-width: 500px !important;
+  max-height: 200px !important;
+}
+
+body > app-root > div > div > div.col-md-8 > app-map > agm-map > div.agm-map-container-inner.sebm-google-map-container-inner > div > div > div:nth-child(1) > div:nth-child(4) > div:nth-child(4) > div > div.gm-style-iw > div:nth-child(1) > div > img {
+  height: 200px !important;
+  float: left;
+}

@@ -4,6 +4,7 @@ agm-map {
 
 img {
   max-width: 200px !important;
+  max-height: 200px !important;
 }
 
 h5 {

@@ -174,4 +174,9 @@ export class MapService implements OnInit {
     }).subscribe(data => { this.routeResult.next(data); console.log(data); });
   }
 
+  getPublicRoutes() {
+    let url = "http://localhost:3000/routes/public";
+    return this.http.get(url).map(res => res.json());
+  }
+
 }

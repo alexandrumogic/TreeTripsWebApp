@@ -57,6 +57,7 @@ import { DirectionsMapDirective } from './components/map/directions-map.directiv
 import { AccountComponent } from './components/dashboard/account-controller/account/account.component';
 import { UserService } from './services/user.service';
 import { RoutesSavedComponent } from './components/dashboard/route-controller/routes-saved/routes-saved.component';
+import { RoutesPublicComponent } from './components/dashboard/route-controller/routes-public/routes-public.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { RoutesSavedComponent } from './components/dashboard/route-controller/ro
     RouteControllerComponent,
     DirectionsMapDirective,
     AccountComponent,
-    RoutesSavedComponent
+    RoutesSavedComponent,
+    RoutesPublicComponent
   ],
   imports: [
     BrowserModule,
@@ -94,7 +96,8 @@ import { RoutesSavedComponent } from './components/dashboard/route-controller/ro
     MatCardModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatTableModule
+    MatTableModule,
+    MatCheckboxModule
   ],
   providers: [ MapService, TreesService, RoutesService, UserService ],
   bootstrap: [AppComponent]

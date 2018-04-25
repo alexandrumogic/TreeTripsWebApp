@@ -3,7 +3,7 @@
       <p>Pentru a iti putea vedea traseele salvate te rog sa te autentifici.</p>
 </div>
 <div *ngIf="isUserAuthenticated">
-      <div class="example-container mat-elevation-z8">
+      <div class="example-container mat-elevation-z8" style="margin-top: 5px;">
         <mat-table #table [dataSource]="dataSource">
 
           <ng-container matColumnDef="date">
@@ -25,6 +25,14 @@
           <ng-container matColumnDef="halts">
             <mat-header-cell *matHeaderCellDef> Popasuri </mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.halts}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef> Actiune </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <button mat-button color="primary" >Arata</button>
+              <button mat-button color="warn" >Sterge</button>
+            </mat-cell>
           </ng-container>
 
           <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

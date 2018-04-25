@@ -77,7 +77,7 @@
             </mat-form-field>
           </div>
           <div>
-            <button mat-button color="primary" >Publica</button>
+            <mat-checkbox [(ngModel)]="makeRoutePublic">Publica</mat-checkbox>
             <button mat-button (click)="saveRoute()" color="primary" >Salveaza</button>
           </div>
         </mat-step>
@@ -88,7 +88,7 @@
       <ng-template mat-tab-label>
         <i class="material-icons">share</i> Trasee publice
       </ng-template>
-
+        <routes-public></routes-public>
     </mat-tab>
     <mat-tab label="Trasee salvate">
       <ng-template mat-tab-label>
