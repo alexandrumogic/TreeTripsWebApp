@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MapService } from '../../../../services/map.service';
 import { UserService } from '../../../../services/user.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'routes-public',

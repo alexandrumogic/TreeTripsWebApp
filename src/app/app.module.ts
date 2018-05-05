@@ -58,6 +58,7 @@ import { AccountComponent } from './components/dashboard/account-controller/acco
 import { UserService } from './services/user.service';
 import { RoutesSavedComponent } from './components/dashboard/route-controller/routes-saved/routes-saved.component';
 import { RoutesPublicComponent } from './components/dashboard/route-controller/routes-public/routes-public.component';
+import { RouteDetailsDialogComponent } from './components/dashboard/route-controller/routes-public/route-details-dialog/route-details-dialog.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { RoutesPublicComponent } from './components/dashboard/route-controller/r
     DirectionsMapDirective,
     AccountComponent,
     RoutesSavedComponent,
-    RoutesPublicComponent
+    RoutesPublicComponent,
+    RouteDetailsDialogComponent
   ],
   imports: [
     BrowserModule,
