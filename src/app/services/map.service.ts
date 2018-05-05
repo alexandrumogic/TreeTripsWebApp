@@ -26,6 +26,8 @@ export class MapService implements OnInit {
   origin = {lat: "", lng: ""};
   destination = {lat: "", lng: ""};
   baseApiURL = 'http://localhost:3000/trees';
+  wayPoints;
+  wayPointsSubject;
 
   constructor(private treesService: TreesService, private http: Http, private httpClient: HttpClient) {
     this.routeResult = new Subject;
@@ -33,6 +35,7 @@ export class MapService implements OnInit {
     this.halts = new BehaviorSubject<Object[]>([]);
     this.originSubject = new BehaviorSubject<Object>({});
     this.destinationSubject = new BehaviorSubject<Object>({});
+    this.wayPointsSubject = new BehaviorSubject<Object>([]);
     this.markedToVisit = new BehaviorSubject<Trees[]>([]);
     this.pointClickedOnMap = new Subject;
     this.allowClickedMap = false;
@@ -97,6 +100,11 @@ export class MapService implements OnInit {
   setDestination(coords) {
     this.destination = coords;
     this.destinationSubject.next(coords);
+  }
+
+  setWaypoints(wpts) {
+    this.wayPoints = wpts;
+    this.wayPointsSubject.next(wpts);
   }
 
   getHalts() {

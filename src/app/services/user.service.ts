@@ -34,7 +34,6 @@ export class UserService {
     var url = this.baseApiURL + "/login"
     return this.http.post(url, { email: email, password: password }).map(res => res.json())
           .subscribe(result => {
-
             var name = result.name;
             var token = result.token;
 
@@ -47,7 +46,6 @@ export class UserService {
               this.isUserAuthenticated.next(true);
               this._getUserSavedRoutes();
               this._getUserAddedTrees();
-
             }
       });
   }
@@ -76,6 +74,22 @@ export class UserService {
     return this.http.post(url, { token: this.userToken, route: route });
   }
 
+  deleteUserRoute(routeKey) {
+    console.log("user.service: deleteUserRoute");
+    var url = this.baseApiURL + "/routes";
+    return new Promise((resolve, reject) => {
+      return this.http.delete(url, { body: { token: this.userToken, routeKey: routeKey } })
+          .subscribe(result => {
+            if (result.status == 200) {
+              this._getUserSavedRoutes();
+              window.alert("Traseu sters cu success!");
+            } else {
+              window.alert("Eroare in stergerea traseului, incercati din nou.");
+            }
+          });
+    })
+  }
+
   makeRoutePublic(route: Route) {
     var url = "http://localhost:3000/routes/public";
     return this.http.post(url, { route: route })
@@ -86,7 +100,6 @@ export class UserService {
 
   private _getUserSavedRoutes() {
     var url = this.baseApiURL + "/routes";
-    console.log(this.userToken);
     this.http.get(url, { params: { token: this.userToken } }).map(res => res.json())
         .subscribe(result => {
           this.userSavedRoutes.next(result);

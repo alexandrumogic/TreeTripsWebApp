@@ -57,6 +57,10 @@ export class MapComponent {
       console.log(data);
       this.destination = data;
     });
+
+    this.mapService.wayPointsSubject.subscribe(data => {
+      this.waypoints = data;
+    })
   }
 
   mapClicked($event: any) {

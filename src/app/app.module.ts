@@ -97,7 +97,8 @@ import { RoutesPublicComponent } from './components/dashboard/route-controller/r
     MatDatepickerModule,
     MatNativeDateModule,
     MatTableModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatDialogModule
   ],
   providers: [ MapService, TreesService, RoutesService, UserService ],
   bootstrap: [AppComponent]

@@ -70,11 +70,21 @@
         <mat-step *ngIf="isUserAuthenticated">
           <ng-template matStepLabel>Salvare / publicare traseu</ng-template>
           <div>
-            <mat-form-field>
-              <input matInput [matDatepicker]="picker" placeholder="Alege data">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
+            <form [formGroup]="routeFormGroup">
+              <div>
+                <mat-form-field>
+                  <input matInput [matDatepicker]="picker" placeholder="Alege data" formControlName="dtPick">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field *ngIf="makeRoutePublic">
+                  <textarea matInput formControlName="description" placeholder="Scrie o scurta informatie asupra traseului"
+                            style="height: 50px; width: 180px; min-width: 100%" formControlName="infoRm"></textarea>
+                </mat-form-field>
+              </div>
+          </form>
           </div>
           <div>
             <mat-checkbox [(ngModel)]="makeRoutePublic">Publica</mat-checkbox>

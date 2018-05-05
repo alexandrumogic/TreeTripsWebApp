@@ -3,29 +3,30 @@
 
     <ng-container matColumnDef="date">
       <mat-header-cell *matHeaderCellDef> Data </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.date}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.value.date}} </mat-cell>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="distance">
       <mat-header-cell *matHeaderCellDef> Distanta </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.distance}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.value.distance}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="trees">
       <mat-header-cell *matHeaderCellDef> Pomi </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.trees}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.value.trees}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="halts">
       <mat-header-cell *matHeaderCellDef> Popasuri </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.halts}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.value.halts}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="action">
       <mat-header-cell *matHeaderCellDef> Actiune </mat-header-cell>
       <mat-cell *matCellDef="let element">
-          <button mat-button color="primary" >Detalii</button>
+          <button mat-button color="primary" (click)="showDetails(element)">Detalii</button>
+          <button mat-button color="warn" (click)="showRoute(element)">Arata</button>
       </mat-cell>
     </ng-container>
 

@@ -3,6 +3,7 @@ import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { MapService } from '../../../services/map.service';
 import { UserService } from '../../../services/user.service';
 import { Route } from '../../../classes/route';
+import { RoutePublic } from '../../../classes/route-public';
 import { MapCoordonates } from '../../../classes/map-coordonates';
 import { RoutesSavedComponent } from './routes-saved/routes-saved.component';
 import { RoutesPublicComponent } from './routes-public/routes-public.component';
@@ -26,6 +27,7 @@ export class RouteControllerComponent implements OnInit {
   isUserAuthenticated: boolean;
   distance;
   makeRoutePublic: boolean = false;
+  userName;
 
   constructor(private _formBuilder: FormBuilder, private _mapService: MapService, private _userService: UserService) {
 
@@ -87,6 +89,10 @@ export class RouteControllerComponent implements OnInit {
 
   ngOnInit() {
 
+    this._userService.getUserName().subscribe(value => {
+      this.userName = value;
+    })
+
     this._mapService.getDistance().subscribe(distance => {
       this.distance = distance;
     });
@@ -106,7 +112,8 @@ export class RouteControllerComponent implements OnInit {
       lngStr: ['', Validators.required],
       latEnd: ['', Validators.required],
       lngEnd: ['', Validators.required],
-      dtPick: ['',                    ]
+      dtPick: ['',                    ],
+      infoRm: ['',                    ]
     });
 
   }
@@ -147,12 +154,21 @@ export class RouteControllerComponent implements OnInit {
     let destin = new MapCoordonates(this.routeFormGroup.controls['latEnd'].value, this.routeFormGroup.controls['lngEnd'].value);
     let waypoints = this.transformPointsToCoords();
     let currentDate = new Date();
+
     let dateTime = currentDate.getDate() + "/" + (currentDate.getMonth()+1) + "/" + currentDate.getFullYear() + " "
                   + currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds();
+
     let route = new Route(origin, destin, waypoints, dateTime, this.treesCounterToVisit.length, this.haltsCounterToVisit.length, this.distance);
 
     if (this.makeRoutePublic) {
-      this._userService.makeRoutePublic(route);
+      var info = this.routeFormGroup.controls['infoRm'].value;
+      var organizer = this.userName;
+      var participants = [];
+
+      let publicRoute = new RoutePublic(origin, destin, waypoints, dateTime, this.treesCounterToVisit.length,
+        this.haltsCounterToVisit.length, this.distance, info, organizer, participants);
+
+      this._userService.makeRoutePublic(publicRoute);
     }
 
     this._userService.saveUserRoute(route).subscribe(result => {

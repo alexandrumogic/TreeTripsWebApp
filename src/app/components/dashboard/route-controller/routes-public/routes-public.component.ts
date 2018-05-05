@@ -18,14 +18,27 @@ export class RoutesPublicComponent implements OnInit {
 
   ngOnInit() {
     this._mapService.getPublicRoutes().subscribe(value => {
-      this.publicRoutes = Object.keys(value).map(function(key) {
-            return value[key];
+
+      var tempArr = [];
+      Object.keys(value).map(function(key) {
+        var route = { key: key, value: value[key] };
+        tempArr.push(route);
       });
 
+      this.publicRoutes = tempArr;
       this.dataSource = this.publicRoutes;
 
     });
+  }
 
+  showRoute(element) {
+    this._mapService.setOrigin(element.value.origin);
+    this._mapService.setDestination(element.value.destination);
+    this._mapService.setWaypoints(element.value.waypoints);
+    this._mapService.calculateRoute();
+  }
 
+  showDetails(element) {
+    window.alert("OK");
   }
 }
