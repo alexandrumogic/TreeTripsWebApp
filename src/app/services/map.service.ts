@@ -84,10 +84,10 @@ export class MapService implements OnInit {
 
     return this.http.post(url, input).subscribe(
         res => {
-          console.log(res);
+          window.alert("Pom adaugat cu success!");
         },
         err => {
-          console.log("Error occured");
+          window.alert("Eroarea in adaugarea pomului, incearca din nou!");
         }
       );
   }

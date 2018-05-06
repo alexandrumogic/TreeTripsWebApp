@@ -14,6 +14,7 @@ export class MapControllerComponent implements OnInit {
   showTreesFromACategory = new FormControl(false);
   showAllTreesOnMap = new FormControl(true);
   showHaltsControl = new FormControl(true);
+  showUserTreesControl = new FormControl(false);
   coordsFormGroup: FormGroup;
   categoryFormGroup: FormGroup;
   treeDetailsGroup: FormGroup;
@@ -80,6 +81,8 @@ export class MapControllerComponent implements OnInit {
     treeData.file = this.imageFile;
     var token = this._userService.getUserToken();
 
+    this.treeDetailsGroup.reset();
+
     this.mapService.addTree(treeData, token);
   }
 
@@ -126,6 +129,22 @@ export class MapControllerComponent implements OnInit {
     this.showAllTreesOnMap.setValue(false);
   }
 
+  showUserTrees() {
+    if (this.showUserTreesControl.value == false) {
+      this.showTreesFromACategory.setValue(false);
+      this._userService.getUserTrees().subscribe(userTrees => {
+        this.mapService.markers.next(userTrees);
+     })
+    } else {
+      if (this.showTreesFromACategory.value == false) {
+        this.showAllTrees();
+      } else {
+        this.showOnlyTreesFromACategory();
+      }
+    }
+
+  }
+
   onSelectCategory(c: any) {
     this.selectedCategory = c;
     this.mapService.setMarkersCategories(this.selectedCategory);
@@ -142,6 +161,7 @@ export class MapControllerComponent implements OnInit {
   }
 
   showAllTrees() {
+    // to do: fix toggle
     this.mapService.getAllTrees();
     if (this.showTreesFromACategory.value == true) {
       this.showTreesFromACategory.setValue(false);

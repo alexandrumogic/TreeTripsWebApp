@@ -10,6 +10,7 @@
 <section class="example-section">
   <mat-slide-toggle [formControl]="showAllTreesOnMap" (click)="showAllTrees()">Arata toti pomii pe harta </mat-slide-toggle>
 </section>
+<section class="example-section">
   <mat-slide-toggle [formControl]="showTreesFromACategory" (click)="showOnlyTreesFromACategory()">Arata doar pomii dintr-o categorie </mat-slide-toggle>
   <p>
     <mat-form-field>
@@ -19,7 +20,11 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-  </p>
+  </p>  
+</section>
+<section *ngIf="isUserAuthenticated" class="example-section">
+  <mat-slide-toggle [formControl]="showUserTreesControl" (click)="showUserTrees()">Arata doar pomii plantati de mine </mat-slide-toggle>
+</section>
 </div>
 </mat-tab>
 <mat-tab label="Planteaza un pom">
