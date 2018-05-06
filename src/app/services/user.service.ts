@@ -72,7 +72,17 @@ export class UserService {
 
   saveUserRoute(route: Route) {
     var url = this.baseApiURL + "/routes";
-    return this.http.post(url, { token: this.userToken, route: route });
+    return new Promise((resolve, reject) => {
+    return this.http.post(url, { token: this.userToken, route: route })
+    .subscribe(result => {
+            if (result.status == 200) {
+              this._getUserSavedRoutes();
+              window.alert("Traseu salvat cu success!");
+            } else {
+              window.alert("Traseul nu a putut fi salvat, incearca din nou.");
+            }
+      });
+    })
   }
 
   deleteUserRoute(routeKey) {

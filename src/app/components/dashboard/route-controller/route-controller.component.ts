@@ -171,13 +171,7 @@ export class RouteControllerComponent implements OnInit {
       this._userService.makeRoutePublic(publicRoute);
     }
 
-    this._userService.saveUserRoute(route).subscribe(result => {
-            if (result.status == 200) {
-              window.alert("Traseu salvat cu success!");
-            } else {
-              window.alert("Traseul nu a putut fi salvat, incearca din nou.");
-            }
-      });
+    this._userService.saveUserRoute(route);
   }
 
   transformPointsToCoords() {
