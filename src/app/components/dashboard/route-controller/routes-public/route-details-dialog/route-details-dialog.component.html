@@ -1,3 +1,45 @@
-<p>
-  route-details-dialog works!
-</p>
+<div *ngIf="!joined">
+<h2 mat-dialog-title>Detalii traseu</h2>
+<mat-dialog-content>
+	<div class="row col-md-12">
+		<b>Informatii: </b> {{ data.info }}
+	</div>
+	<div class="row col-md-12">
+		<b>Data: </b> {{ data.data }}
+	</div>		
+	<div class="row col-md-12">
+		<b>Organizator: </b> {{ data.organizer }}
+	</div>
+	<div class="row col-md-12">
+		<b>Participanti: </b>
+		<div *ngFor="let p of data.participants">
+			{{ p }};
+		</div>		
+	</div>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<div class="row col-md-12">
+		<h5>Te alaturi?</h5>
+	</div>
+	<div class="row col-md-12">
+	  <button mat-button color="warn" mat-dialog-close>No</button>
+	  <button mat-button color="primary" (click)="joinTheRoute(data.key)">Yes</button>
+	</div>
+</mat-dialog-actions>	
+</div>
+
+
+<div *ngIf="joined">
+	<h2 mat-dialog-title>Detalii traseu</h2>
+	<mat-dialog-content>
+		<div class="row col-md-12">
+			{{ response }} 
+		</div>
+	</mat-dialog-content>
+	<mat-dialog-actions>
+		<div class="row col-md-12">
+		  <button mat-button color="warn" mat-dialog-close [mat-dialog-close]="true">Inchide</button>
+		</div>
+	</mat-dialog-actions>
+</div>
+

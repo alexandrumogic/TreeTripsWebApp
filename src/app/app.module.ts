@@ -103,6 +103,7 @@ import { RouteDetailsDialogComponent } from './components/dashboard/route-contro
     MatDialogModule
   ],
   providers: [ MapService, TreesService, RoutesService, UserService ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [RouteDetailsDialogComponent]
 })
 export class AppModule { }

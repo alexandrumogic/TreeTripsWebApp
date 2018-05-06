@@ -3,6 +3,7 @@ import { Http, Response, RequestOptions, Headers, URLSearchParams } from '@angul
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { MapCoordonates } from '../classes/map-coordonates';
 import { Route } from '../classes/route';
+import { RoutePublic } from '../classes/route-public';
 import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/operator/map';
@@ -96,6 +97,15 @@ export class UserService {
       .subscribe(result => {
         console.log(result);
       });
+  }
+
+  joinPublicRoute(routeKey) {
+    var url = "http://localhost:3000/routes/public/join";
+    var userName;
+    this.userName.subscribe(value => {
+      userName = value;
+    })
+    return this.http.post(url, { routeKey: routeKey, userName: userName });
   }
 
   private _getUserSavedRoutes() {
