@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TreesService } from '../../../services/trees.service';
 import { MapService } from '../../../services/map.service';
 import { UserService } from '../../../services/user.service';
 
@@ -25,7 +24,8 @@ export class MapControllerComponent implements OnInit {
   selectedCategory;
   imageFile;
 
-  constructor(private _formBuilder: FormBuilder, private treesService: TreesService, private mapService: MapService, private _userService: UserService) { }
+  constructor(private _formBuilder: FormBuilder, private _mapService: MapService,
+              private _userService: UserService) { }
 
   ngOnInit() {
 
@@ -51,7 +51,7 @@ export class MapControllerComponent implements OnInit {
       treeDescription: ['']
     });
 
-    this.treesService.getCategories().subscribe(data => {
+    this._mapService.getCategories().subscribe(data => {
       this.categories = Object.keys(data).map(function(key) {
          return data[key];
       });
@@ -59,10 +59,8 @@ export class MapControllerComponent implements OnInit {
   }
 
   detectFiles(event) {
-
     this.imageFile = event.target.files[0];
     console.log(this.imageFile);
-
   }
 
   submitTreeToDatabase() {
@@ -83,7 +81,7 @@ export class MapControllerComponent implements OnInit {
 
     this.treeDetailsGroup.reset();
 
-    this.mapService.addTree(treeData, token);
+    this._mapService.addTree(treeData, token);
   }
 
   resetCoordPoint() {
@@ -115,15 +113,15 @@ export class MapControllerComponent implements OnInit {
 
   showHalts() {
     if (this.showHaltsControl.value == true) {
-      this.mapService.setHaltsVisibleOnMap(false);
+      this._mapService.setHaltsVisibleOnMap(false);
     } else {
-      this.mapService.setHaltsVisibleOnMap(true);
+      this._mapService.setHaltsVisibleOnMap(true);
     }
   }
 
   showOnlyTreesFromACategory() {
     if (this.selectedCategory) {
-      this.mapService.setMarkersCategories(this.selectedCategory);
+      this._mapService.setMarkersCategories(this.selectedCategory);
     }
 
     this.showAllTreesOnMap.setValue(false);
@@ -133,7 +131,7 @@ export class MapControllerComponent implements OnInit {
     if (this.showUserTreesControl.value == false) {
       this.showTreesFromACategory.setValue(false);
       this._userService.getUserTrees().subscribe(userTrees => {
-        this.mapService.markers.next(userTrees);
+        this._mapService.markers.next(userTrees);
      })
     } else {
       if (this.showTreesFromACategory.value == false) {
@@ -142,18 +140,16 @@ export class MapControllerComponent implements OnInit {
         this.showOnlyTreesFromACategory();
       }
     }
-
   }
 
   onSelectCategory(c: any) {
     this.selectedCategory = c;
-    this.mapService.setMarkersCategories(this.selectedCategory);
+    this._mapService.setMarkersCategories(this.selectedCategory);
   }
 
   onSelectCategoryToPlant(c: any) {
     console.log(c);
     this.treeDetailsGroup.controls['category'].setValue(c);
-
   }
 
   resetDescription() {
@@ -162,7 +158,7 @@ export class MapControllerComponent implements OnInit {
 
   showAllTrees() {
     // to do: fix toggle
-    this.mapService.getAllTrees();
+    this._mapService.getAllTrees();
     if (this.showTreesFromACategory.value == true) {
       this.showTreesFromACategory.setValue(false);
     } else {

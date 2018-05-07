@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit }                               from '@angular/core';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MapService } from '../../../services/map.service';
-import { UserService } from '../../../services/user.service';
-import { Route } from '../../../classes/route';
-import { RoutePublic } from '../../../classes/route-public';
-import { MapCoordonates } from '../../../classes/map-coordonates';
-import { RoutesSavedComponent } from './routes-saved/routes-saved.component';
-import { RoutesPublicComponent } from './routes-public/routes-public.component';
+import { MapService }                                      from '../../../services/map.service';
+import { UserService }                                     from '../../../services/user.service';
+import { Route }                                           from '../../../classes/route';
+import { RoutePublic }                                     from '../../../classes/route-public';
+import { MapCoordonates }                                  from '../../../classes/map-coordonates';
+import { RoutesSavedComponent }                            from './routes-saved/routes-saved.component';
+import { RoutesPublicComponent }                           from './routes-public/routes-public.component';
 
 import 'rxjs/add/operator/first';
 
@@ -180,7 +180,6 @@ export class RouteControllerComponent implements OnInit {
     this.treesMarkedToVisit.forEach(function(data) {
       arr.push(new MapCoordonates(data.coords.lat, data.coords.lng));
     })
-
     return arr;
   }
 

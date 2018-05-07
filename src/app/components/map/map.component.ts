@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { TreesService } from '../../services/trees.service';
 import { MapService } from '../../services/map.service';
 import { Trees, Tree } from '../../classes/tree';
 import { GoogleMapsAPIWrapper } from '@agm/core/services/google-maps-api-wrapper';
@@ -28,7 +27,7 @@ export class MapComponent {
 
   @ViewChild(DirectionsMapDirective) vc: DirectionsMapDirective;
 
-  constructor(private treesService: TreesService, private mapService: MapService) {
+  constructor(private mapService: MapService) {
 
     this.mapService.halts.subscribe(data => {
       this.halts = Object.keys(data).map(function(key) {

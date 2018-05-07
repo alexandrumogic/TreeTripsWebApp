@@ -22,7 +22,6 @@ export class RoutesSavedComponent implements OnInit {
     });
 
     this._userService.getUserRoutes().subscribe(value => {
-      console.log(value);
       var tempArr = [];
       Object.keys(value).map(function(key) {
         var route = { key: key, value: value[key] };
@@ -44,7 +43,6 @@ export class RoutesSavedComponent implements OnInit {
   }
 
   deleteRoute(element) {
-    console.log("deleteRoute " + element.key);
     this._userService.deleteUserRoute(element.key);
   }
 

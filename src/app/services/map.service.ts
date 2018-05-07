@@ -1,8 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HttpClient } from '@angular/common/http';
-import { TreesService } from './trees.service';
 import { Trees, Tree } from '../classes/tree';
 import { Observable } from 'rxjs/Rx';
 import { ReplaySubject } from 'rxjs/ReplaySubject'
@@ -12,7 +11,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
 @Injectable()
-export class MapService implements OnInit {
+export class MapService {
   markers;
   halts;
   markersCategory;
@@ -29,7 +28,7 @@ export class MapService implements OnInit {
   wayPoints;
   wayPointsSubject;
 
-  constructor(private treesService: TreesService, private http: Http, private httpClient: HttpClient) {
+  constructor(private http: Http, private httpClient: HttpClient) {
     this.routeResult = new Subject;
     this.markers = new BehaviorSubject<Trees[]>([]);
     this.halts = new BehaviorSubject<Object[]>([]);
@@ -52,10 +51,6 @@ export class MapService implements OnInit {
               return data[key];
           }));
         });
-  }
-
-  ngOnInit() {
-
   }
 
   setDistance(distance) {

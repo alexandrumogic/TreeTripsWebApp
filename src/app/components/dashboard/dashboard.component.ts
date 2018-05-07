@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit }                               from '@angular/core';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MapControllerComponent } from './map-controller/map-controller.component';
-import { RouteControllerComponent } from './route-controller/route-controller.component';
-import { AccountComponent } from './account-controller/account/account.component';
+import { MapControllerComponent }                          from './map-controller/map-controller.component';
+import { RouteControllerComponent }                        from './route-controller/route-controller.component';
+import { AccountComponent }                                from './account-controller/account/account.component';
 
 @Component({
   selector: 'app-dashboard',

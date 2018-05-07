@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable }                                               from '@angular/core';
 import { Http, Response, RequestOptions, Headers, URLSearchParams } from '@angular/http';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { MapCoordonates } from '../classes/map-coordonates';
-import { Route } from '../classes/route';
-import { RoutePublic } from '../classes/route-public';
-import { Observable } from 'rxjs/Observable';
-
+import { BehaviorSubject }                                          from 'rxjs/BehaviorSubject';
+import { MapCoordonates }                                           from '../classes/map-coordonates';
+import { Route }                                                    from '../classes/route';
+import { RoutePublic }                                              from '../classes/route-public';
+import { Observable }                                               from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -41,7 +40,6 @@ export class UserService {
             if (token == "User sau parola incorecte. Incercati din nou.") {
               window.alert("User sau parola incorecte. Incercati din nou.");
             } else {
-              console.log("loggedin");
               this.userToken = token;
               this.userName.next(name);
               this.isUserAuthenticated.next(true);
@@ -86,19 +84,18 @@ export class UserService {
   }
 
   deleteUserRoute(routeKey) {
-    console.log("user.service: deleteUserRoute");
     var url = this.baseApiURL + "/routes";
     return new Promise((resolve, reject) => {
       return this.http.delete(url, { body: { token: this.userToken, routeKey: routeKey } })
-          .subscribe(result => {
+        .subscribe(result => {
             if (result.status == 200) {
               this._getUserSavedRoutes();
               window.alert("Traseu sters cu success!");
             } else {
               window.alert("Eroare in stergerea traseului, incercati din nou.");
             }
-          });
-    })
+        });
+    });
   }
 
   makeRoutePublic(route: Route) {
@@ -143,7 +140,7 @@ export class UserService {
       this.http.get(url, { params: { token: this.userToken } }).map(res => res.json())
           .subscribe(result => {
             this.userTrees.next(result);
-          });
+        });
   }
 
 }

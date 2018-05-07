@@ -16,8 +16,6 @@ import { MapControllerComponent } from './components/dashboard/map-controller/ma
 import { RouteControllerComponent } from './components/dashboard/route-controller/route-controller.component';
 
 import { MapService } from './services/map.service';
-import { TreesService } from './services/trees.service';
-import { RoutesService } from './services/routes.service';
 
 import {
   MatAutocompleteModule,
@@ -102,7 +100,7 @@ import { RouteDetailsDialogComponent } from './components/dashboard/route-contro
     MatCheckboxModule,
     MatDialogModule
   ],
-  providers: [ MapService, TreesService, RoutesService, UserService ],
+  providers: [ MapService, UserService ],
   bootstrap: [AppComponent],
   entryComponents: [RouteDetailsDialogComponent]
 })
