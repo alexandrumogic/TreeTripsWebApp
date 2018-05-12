@@ -16,6 +16,7 @@ import { MapControllerComponent } from './components/dashboard/map-controller/ma
 import { RouteControllerComponent } from './components/dashboard/route-controller/route-controller.component';
 
 import { MapService } from './services/map.service';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 import {
   MatAutocompleteModule,
@@ -58,6 +59,9 @@ import { RoutesSavedComponent } from './components/dashboard/route-controller/ro
 import { RoutesPublicComponent } from './components/dashboard/route-controller/routes-public/routes-public.component';
 import { RouteDetailsDialogComponent } from './components/dashboard/route-controller/routes-public/route-details-dialog/route-details-dialog.component';
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -81,6 +85,15 @@ import { RouteDetailsDialogComponent } from './components/dashboard/route-contro
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBLfs4ab6ODh4tuJkR7r38lhEaw_kKc_ZI'
     }),
+    AngularFireModule.initializeApp({
+      apiKey: "AIzaSyAoQrJbN_JiLCKOtMT65saGar8Mkho3H8s",
+      authDomain: "plant-a-tree-1500736699098.firebaseapp.com",
+      databaseURL: "https://plant-a-tree-1500736699098.firebaseio.com",
+      projectId: "plant-a-tree-1500736699098",
+      storageBucket: "plant-a-tree-1500736699098.appspot.com",
+      messagingSenderId: "1016801216988"
+    }),
+    AngularFireAuthModule,
     MatSliderModule,
     MatSlideToggleModule,
     FormsModule,

@@ -5,6 +5,7 @@ import { MapCoordonates }                                           from '../cla
 import { Route }                                                    from '../classes/route';
 import { RoutePublic }                                              from '../classes/route-public';
 import { Observable }                                               from 'rxjs/Observable';
+import { AngularFireAuth } from 'angularfire2/auth';
 import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -18,7 +19,7 @@ export class UserService {
   private userSavedRoutes;
   private userTrees;
 
-  constructor(private http: Http) {
+  constructor(private http: Http, public afAuth: AngularFireAuth) {
     this.isUserAuthenticated = new BehaviorSubject<boolean>(false);
     this.userName = new BehaviorSubject<string>("");
     this.userSavedRoutes = new BehaviorSubject<any>([]);
@@ -27,29 +28,33 @@ export class UserService {
 
   createUserAccount(name, email, password) {
     return this.http.post(this.baseApiURL, { name: name, email: email, password: password })
-          .subscribe(result => { this.userID = result.text(); console.log(this.userID); });
+          .subscribe(result => { this.loginUser(email, password) });
   }
 
   loginUser(email, password) {
-    var url = this.baseApiURL + "/login"
-    return this.http.post(url, { email: email, password: password }).map(res => res.json())
-          .subscribe(result => {
-            var name = result.name;
-            var token = result.token;
-
-            if (token == "User sau parola incorecte. Incercati din nou.") {
-              window.alert("User sau parola incorecte. Incercati din nou.");
-            } else {
-              this.userToken = token;
-              this.userName.next(name);
-              this.isUserAuthenticated.next(true);
-              this._getUserSavedRoutes();
-              this._getUserAddedTrees();
-            }
-      });
+    this.afAuth.auth.signInWithEmailAndPassword(email, password)
+    .catch(error => {
+      if (error.code == "auth/user-not-found") {
+        window.alert("User sau parola incorecte!");
+      } else {
+        window.alert("A aparut o eroare, incercati din nou!");
+      }
+      return "error";
+    }).then(user => {
+      if (user != "error") {
+        this.afAuth.auth.currentUser.getIdToken().then(token => {
+          this.userToken = token;
+          this.userName.next(user.displayName);
+          this.isUserAuthenticated.next(true);
+          this._getUserSavedRoutes();
+          this._getUserAddedTrees();
+        })
+      }
+    });
   }
 
   logOutUser() {
+    this.afAuth.auth.signOut();
     this.userID = null;
     this.userToken = null;
     this.isUserAuthenticated.next(false);
