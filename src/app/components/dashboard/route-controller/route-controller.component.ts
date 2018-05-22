@@ -31,7 +31,7 @@ export class RouteControllerComponent implements OnInit {
 
   constructor(private _formBuilder: FormBuilder, private _mapService: MapService, private _userService: UserService) {
 
-    this._mapService.markedToVisit.subscribe(data => {
+    this._mapService.getPointsMarkedToVisit().subscribe(data => {
       this.treesMarkedToVisit = Object.keys(data).map(function(key) {
             return data[key];
       });

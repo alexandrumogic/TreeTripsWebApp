@@ -6,3 +6,7 @@ export class Halt {
   info: string;
   icon: string;
 }
+
+export class Halts {
+  id: Halt;
+}

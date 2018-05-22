@@ -5,33 +5,37 @@ import { MapCoordonates }                                           from '../cla
 import { Route }                                                    from '../classes/route';
 import { RoutePublic }                                              from '../classes/route-public';
 import { Observable }                                               from 'rxjs/Observable';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireAuth }                                          from 'angularfire2/auth';
+import { Trees, Tree }                                              from '../classes/tree';
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class UserService {
 
-  private baseApiURL = 'http://localhost:3000/user';
-  private userID: string = null;
-  private userToken: string = null;
-  private userName;
-  private isUserAuthenticated;
-  private userSavedRoutes;
-  private userTrees;
+  private userNameSubject:        BehaviorSubject<string>;
+  private isUserAuthenticated:    BehaviorSubject<boolean>;
+  private userSavedRoutes:        BehaviorSubject<any>;
+  private userTreesSubject:       BehaviorSubject<Trees[]>;
+  private baseApiURL:             string;
+  private userID:                 string;
+  private userToken:              string;
 
   constructor(private http: Http, public afAuth: AngularFireAuth) {
-    this.isUserAuthenticated = new BehaviorSubject<boolean>(false);
-    this.userName = new BehaviorSubject<string>("");
-    this.userSavedRoutes = new BehaviorSubject<any>([]);
-    this.userTrees = new BehaviorSubject<any>([]);
+    this.isUserAuthenticated    = new BehaviorSubject<boolean>(false);
+    this.userNameSubject        = new BehaviorSubject<string>("");
+    this.userSavedRoutes        = new BehaviorSubject<any>([]);
+    this.userTreesSubject       = new BehaviorSubject<Trees[]>([]);
+    this.baseApiURL             = 'http://localhost:3000/user';
+    this.userID                 = null;
+    this.userToken              = null;
   }
 
-  createUserAccount(name, email, password) {
+  public createUserAccount(name, email, password) {
     return this.http.post(this.baseApiURL, { name: name, email: email, password: password })
           .subscribe(result => { this.loginUser(email, password) });
   }
 
-  loginUser(email, password) {
+  public loginUser(email, password) {
     this.afAuth.auth.signInWithEmailAndPassword(email, password)
     .catch(error => {
       if (error.code == "auth/user-not-found") {
@@ -44,42 +48,42 @@ export class UserService {
       if (user != "error") {
         this.afAuth.auth.currentUser.getIdToken().then(token => {
           this.userToken = token;
-          this.userName.next(user.displayName);
+          this.userNameSubject.next(user.displayName);
           this.isUserAuthenticated.next(true);
-          this._getUserSavedRoutes();
-          this._getUserAddedTrees();
+          this.getUserSavedRoutes();
+          this.getUserAddedTrees();
         })
       }
     });
   }
 
-  logOutUser() {
+  public logOutUser() {
     this.afAuth.auth.signOut();
     this.userID = null;
     this.userToken = null;
     this.isUserAuthenticated.next(false);
-    this.userName.next("");
+    this.userNameSubject.next("");
   }
 
-  getUserID() {
+  public getUserID() {
     return this.userID;
   }
 
-  getUserName() {
-    return this.userName.asObservable();
+  public getUserName() {
+    return this.userNameSubject.asObservable();
   }
 
-  checkIfUserIsAuthenticated() {
+  public checkIfUserIsAuthenticated() {
     return this.isUserAuthenticated.asObservable();
   }
 
-  saveUserRoute(route: Route) {
+  public saveUserRoute(route: Route) {
     var url = this.baseApiURL + "/routes";
     return new Promise((resolve, reject) => {
     return this.http.post(url, { token: this.userToken, route: route })
     .subscribe(result => {
             if (result.status == 200) {
-              this._getUserSavedRoutes();
+              this.getUserSavedRoutes();
               window.alert("Traseu salvat cu success!");
             } else {
               window.alert("Traseul nu a putut fi salvat, incearca din nou.");
@@ -88,13 +92,13 @@ export class UserService {
     })
   }
 
-  deleteUserRoute(routeKey) {
+  public deleteUserRoute(routeKey) {
     var url = this.baseApiURL + "/routes";
     return new Promise((resolve, reject) => {
       return this.http.delete(url, { body: { token: this.userToken, routeKey: routeKey } })
         .subscribe(result => {
             if (result.status == 200) {
-              this._getUserSavedRoutes();
+              this.getUserSavedRoutes();
               window.alert("Traseu sters cu success!");
             } else {
               window.alert("Eroare in stergerea traseului, incercati din nou.");
@@ -103,7 +107,7 @@ export class UserService {
     });
   }
 
-  makeRoutePublic(route: Route) {
+  public makeRoutePublic(route: Route) {
     var url = "http://localhost:3000/routes/public";
     return this.http.post(url, { route: route })
       .subscribe(result => {
@@ -111,16 +115,16 @@ export class UserService {
       });
   }
 
-  joinPublicRoute(routeKey) {
+  public joinPublicRoute(routeKey) {
     var url = "http://localhost:3000/routes/public/join";
     var userName;
-    this.userName.subscribe(value => {
+    this.userNameSubject.subscribe(value => {
       userName = value;
     })
     return this.http.post(url, { routeKey: routeKey, userName: userName });
   }
 
-  private _getUserSavedRoutes() {
+  private getUserSavedRoutes() {
     var url = this.baseApiURL + "/routes";
     this.http.get(url, { params: { token: this.userToken } }).map(res => res.json())
         .subscribe(result => {
@@ -136,15 +140,15 @@ export class UserService {
     return this.userToken;
   }
 
-  public getUserTrees(): Observable<any> {
-    return this.userTrees.asObservable();
+  public getUserTrees(): Observable<Trees[]> {
+    return this.userTreesSubject.asObservable();
   }
 
-  private _getUserAddedTrees() {
+  private getUserAddedTrees() {
       var url = this.baseApiURL + "/trees";
       this.http.get(url, { params: { token: this.userToken } }).map(res => res.json())
           .subscribe(result => {
-            this.userTrees.next(result);
+            this.userTreesSubject.next(result);
         });
   }
 

@@ -22,14 +22,14 @@ export class DirectionsMapDirective {
   }
 
   constructor(private _gmapsApi: GoogleMapsAPIWrapper, private mapService: MapService) {
-    this.mapService.routeResult.subscribe(data => {
+    this.mapService.getRouteGeneratedResult().subscribe(data => {
       console.log("new route:");
       console.log(data);
       this.route = data;
       this.calculateRoute();
     });
 
-    this.mapService.markedToVisit.subscribe(data => {
+    this.mapService.getPointsMarkedToVisit().subscribe(data => {
       this.waypoints = Object.keys(data).map(function(key) {
             return data[key].coords;
         });

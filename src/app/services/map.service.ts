@@ -3,6 +3,7 @@ import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HttpClient } from '@angular/common/http';
 import { Trees, Tree } from '../classes/tree';
+import { Halt, Halts } from '../classes/halt';
 import { Observable } from 'rxjs/Rx';
 import { ReplaySubject } from 'rxjs/ReplaySubject'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -12,57 +13,58 @@ import 'rxjs/add/operator/do';
 
 @Injectable()
 export class MapService {
-  markers;
-  halts;
-  markersCategory;
-  markedToVisit;
-  pointClickedOnMap;
-  allowClickedMap;
-  routeResult;
-  originSubject;
-  destinationSubject;
-  distance;
-  origin = {lat: "", lng: ""};
-  destination = {lat: "", lng: ""};
-  baseApiURL = 'http://localhost:3000/trees';
-  wayPoints;
-  wayPointsSubject;
+
+  private markersSubject:         BehaviorSubject<Trees[]>;
+  private haltsSubject:           BehaviorSubject<Halts[]>;
+  private markedToVisitSubject:   BehaviorSubject<Trees[]>;
+  private originSubject:          BehaviorSubject<any>;
+  private destinationSubject:     BehaviorSubject<any>;
+  private distanceSubject:        BehaviorSubject<any>;
+  private wayPointsSubject:       BehaviorSubject<any>;
+  private routeResult:            Subject<any>;
+  public  pointClickedOnMap:      Subject<any>;
+  private baseApiURL:             string;
+  private markersCategory:        string;
 
   constructor(private http: Http, private httpClient: HttpClient) {
-    this.routeResult = new Subject;
-    this.markers = new BehaviorSubject<Trees[]>([]);
-    this.halts = new BehaviorSubject<Object[]>([]);
-    this.originSubject = new BehaviorSubject<Object>({});
-    this.destinationSubject = new BehaviorSubject<Object>({});
-    this.wayPointsSubject = new BehaviorSubject<Object>([]);
-    this.markedToVisit = new BehaviorSubject<Trees[]>([]);
-    this.pointClickedOnMap = new Subject;
-    this.allowClickedMap = false;
-    this.distance = new BehaviorSubject<any>(0);
+    this.routeResult          = new Subject;
+    this.markersSubject       = new BehaviorSubject<Trees[]>([]);
+    this.haltsSubject         = new BehaviorSubject<Halts[]>([]);
+    this.originSubject        = new BehaviorSubject<any>({});
+    this.destinationSubject   = new BehaviorSubject<any>({});
+    this.wayPointsSubject     = new BehaviorSubject<any>([]);
+    this.markedToVisitSubject = new BehaviorSubject<Trees[]>([]);
+    this.pointClickedOnMap    = new Subject;
+    this.distanceSubject      = new BehaviorSubject<any>(0);
+    this.baseApiURL           = 'http://localhost:3000/trees';
 
     this.getTreesByCategory().subscribe(data => {
-          this.markers.next(Object.keys(data).map(function(key) {
+          this.markersSubject.next(Object.keys(data).map(function(key) {
              return data[key];
           }));
         });
 
     this.getHalts().subscribe(data => {
-          this.halts.next(Object.keys(data).map(function(key) {
+          this.haltsSubject.next(Object.keys(data).map(function(key) {
               return data[key];
           }));
         });
   }
 
-  setDistance(distance) {
+  public setDistance(distance) {
     console.log("map.service | setDistance()");
-    this.distance.next(distance);
+    this.distanceSubject.next(distance);
   }
 
-  getDistance(): Observable<any> {
-    return this.distance.asObservable();
+  public getDistance(): Observable<any> {
+    return this.distanceSubject.asObservable();
   }
 
-  addTree(treeData, userToken) {
+  public getWayPoints(): Observable<any> {
+    return this.wayPointsSubject.asObservable();
+  }
+
+  public addTree(treeData, userToken) {
     var url = 'http://localhost:3000/trees';
     console.log("map.service / addTree() ");
     console.log(treeData.lat);
@@ -87,69 +89,79 @@ export class MapService {
       );
   }
 
-  setOrigin(coords) {
-    this.origin = coords;
+  public setOrigin(coords) {
     this.originSubject.next(coords);
   }
 
-  setDestination(coords) {
-    this.destination = coords;
+  public getOrigin(): Observable<any> {
+    return this.originSubject.asObservable();
+  }
+
+  public setDestination(coords) {
     this.destinationSubject.next(coords);
   }
 
-  setWaypoints(wpts) {
-    this.wayPoints = wpts;
+  public getDestination(): Observable<any> {
+    return this.destinationSubject.asObservable();
+  }
+
+  public setWaypoints(wpts) {
     this.wayPointsSubject.next(wpts);
   }
 
-  getHalts() {
+  public getHalts() {
     var url = 'http://localhost:3000/halts';
     console.log("map.service / getHalts() ");
     return this.http.get(url).map(res => res.json());
   }
 
-  setHaltsVisibleOnMap(status: boolean) {
+  public getHaltsAsObservable(): Observable<Halts[]> {
+    return this.haltsSubject.asObservable();
+  }
+
+  public setHaltsVisibleOnMap(status: boolean) {
     if (status) {
       this.getHalts().subscribe(data => {
-            this.halts.next(Object.keys(data).map(function(key) {
+            this.haltsSubject.next(Object.keys(data).map(function(key) {
                 return data[key];
             }));
           });
     } else {
-      this.halts.next([]);
+      this.haltsSubject.next([]);
     }
   }
 
-
-  getMarkers(): Observable<Tree[]> {
-    console.log("map.service / getMarkers() ");
-    return this.http.get(this.baseApiURL).map(res => <Tree[]>res.json()).do(data => this.markers.next(data));
+  public getMarkers(): Observable<Trees[]> {
+    return this.markersSubject.asObservable();
   }
 
-  setMarkersCategories(category: any) {
+  public setMarkers(data) {
+    this.markersSubject.next(data);
+  }
+
+  public setMarkersCategories(category: any) {
     console.log("Setting category to: " + category);
     this.markersCategory = category;
     this.getTreesByCategory().subscribe(data => {
-          this.markers.next(Object.keys(data).map(function(key) {
+          this.markersSubject.next(Object.keys(data).map(function(key) {
              return data[key];
           }));
         });
   }
 
-  getAllTrees() {
+  public notifyMarkersWithAllTrees() {
     this.getTrees().subscribe(data => {
-          this.markers.next(Object.keys(data).map(function(key) {
+          this.markersSubject.next(Object.keys(data).map(function(key) {
              return data[key];
           }));
         });
   }
 
-  getTrees() {
-    console.log("map.service / getTrees() ");
+  public getTrees(): Observable<any> {
     return this.http.get(this.baseApiURL).map(res => <Tree[]>res.json());
   }
 
-  getTreesByCategory() {
+  public getTreesByCategory() {
     if (!this.markersCategory) {
       return this.http.get(this.baseApiURL).map(res => <Tree[]>res.json());
     } else {
@@ -159,27 +171,40 @@ export class MapService {
     }
   }
 
-  getCategories() {
+  public getCategories() {
     let apiURL = this.baseApiURL+'/categories';
     return this.http.get(apiURL).map(res => res.json());
   }
 
-  calculateRoute() {
+  public calculateRoute() {
     console.log("Calculating");
     var url = 'http://localhost:3000/routes';
+
     this.httpClient.get(url, {
       params: {
-        sPtLat: this.origin.lat,
-        sPtLng: this.origin.lng,
-        ePtLat: this.destination.lat,
-        ePtLng: this.destination.lng
+        sPtLat: this.originSubject.getValue().lat,
+        sPtLng: this.originSubject.getValue().lng,
+        ePtLat: this.destinationSubject.getValue().lat,
+        ePtLng: this.destinationSubject.getValue().lng
       }
     }).subscribe(data => { this.routeResult.next(data); console.log(data); });
   }
 
-  getPublicRoutes() {
+  public getPublicRoutes() {
     let url = "http://localhost:3000/routes/public";
     return this.http.get(url).map(res => res.json());
+  }
+
+  public getPointsMarkedToVisit(): Observable<any> {
+    return this.markedToVisitSubject.asObservable();
+  }
+
+  public setPointsMarkedToVisit(points) {
+    this.markedToVisitSubject.next(points);
+  }
+
+  public getRouteGeneratedResult(): Observable<any> {
+    return this.routeResult.asObservable();
   }
 
 }
