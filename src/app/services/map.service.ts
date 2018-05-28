@@ -181,12 +181,15 @@ export class MapService {
     console.log("Calculating");
     var url = 'http://localhost:3000/routes';
 
+    let origin = new MapCoordonates(this.originSubject.getValue().lat, this.originSubject.getValue().lng);
+    let destination = new MapCoordonates(this.destinationSubject.getValue().lat, this.destinationSubject.getValue().lng);
+
     this.httpClient.get(url, {
       params: {
-        sPtLat: this.originSubject.getValue().lat,
-        sPtLng: this.originSubject.getValue().lng,
-        ePtLat: this.destinationSubject.getValue().lat,
-        ePtLng: this.destinationSubject.getValue().lng
+        sPtLat: origin.lat.toString(),
+        sPtLng: origin.lng.toString(),
+        ePtLat: destination.lat.toString(),
+        ePtLng: destination.lng.toString()
       }
     }).subscribe(data => { this.routeResult.next(data); console.log(data); });
   }
