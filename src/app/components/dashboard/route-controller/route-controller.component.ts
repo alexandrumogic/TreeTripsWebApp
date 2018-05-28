@@ -130,17 +130,17 @@ export class RouteControllerComponent implements OnInit {
 
   markStartPoint() {
     this._mapService.pointClickedOnMap.first().subscribe(data => {
-       this.routeFormGroup.controls['latStr'].setValue(data.coords.lat);
-       this.routeFormGroup.controls['lngStr'].setValue(data.coords.lng);
-       this._mapService.setOrigin({lat: data.coords.lat, lng: data.coords.lng});
+       this.routeFormGroup.controls['latStr'].setValue(data.lat);
+       this.routeFormGroup.controls['lngStr'].setValue(data.lng);
+       this._mapService.setOrigin(new MapCoordonates(data.lat, data.lng));
     })
   }
 
   markEndPoint() {
     this._mapService.pointClickedOnMap.first().subscribe(data => {
-       this.routeFormGroup.controls['latEnd'].setValue(data.coords.lat);
-       this.routeFormGroup.controls['lngEnd'].setValue(data.coords.lng);
-       this._mapService.setDestination({lat: data.coords.lat, lng: data.coords.lng});
+       this.routeFormGroup.controls['latEnd'].setValue(data.lat);
+       this.routeFormGroup.controls['lngEnd'].setValue(data.lng);
+       this._mapService.setDestination(new MapCoordonates(data.lat, data.lng));
     })
   }
 

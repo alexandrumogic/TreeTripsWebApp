@@ -73,7 +73,7 @@ export class MapComponent {
   }
 
   private mapClicked($event: any): void {
-    this.mapService.pointClickedOnMap.next($event);
+    this.mapService.pointClickedOnMap.next(new MapCoordonates($event.coords.lat, $event.coords.lng));
     this.closeInfoWindow();
   }
 
