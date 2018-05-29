@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HttpClient } from '@angular/common/http';
 import { Trees, Tree } from '../classes/tree';
 import { Halt, Halts } from '../classes/halt';
+import { MapCoordonates } from '../classes/map-coordonates';
 import { Observable } from 'rxjs/Rx';
 import { ReplaySubject } from 'rxjs/ReplaySubject'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -17,12 +18,12 @@ export class MapService {
   private markersSubject:         BehaviorSubject<Trees[]>;
   private haltsSubject:           BehaviorSubject<Halts[]>;
   private markedToVisitSubject:   BehaviorSubject<Trees[]>;
-  private originSubject:          BehaviorSubject<any>;
-  private destinationSubject:     BehaviorSubject<any>;
+  private originSubject:          BehaviorSubject<MapCoordonates>;
+  private destinationSubject:     BehaviorSubject<MapCoordonates>;
   private distanceSubject:        BehaviorSubject<any>;
   private wayPointsSubject:       BehaviorSubject<any>;
+  public  pointClickedOnMap:      Subject<MapCoordonates>;
   private routeResult:            Subject<any>;
-  public  pointClickedOnMap:      Subject<any>;
   private baseApiURL:             string;
   private markersCategory:        string;
 
@@ -30,8 +31,8 @@ export class MapService {
     this.routeResult          = new Subject;
     this.markersSubject       = new BehaviorSubject<Trees[]>([]);
     this.haltsSubject         = new BehaviorSubject<Halts[]>([]);
-    this.originSubject        = new BehaviorSubject<any>({});
-    this.destinationSubject   = new BehaviorSubject<any>({});
+    this.originSubject        = new BehaviorSubject<MapCoordonates>(null);
+    this.destinationSubject   = new BehaviorSubject<MapCoordonates>(null);
     this.wayPointsSubject     = new BehaviorSubject<any>([]);
     this.markedToVisitSubject = new BehaviorSubject<Trees[]>([]);
     this.pointClickedOnMap    = new Subject;
@@ -89,19 +90,19 @@ export class MapService {
       );
   }
 
-  public setOrigin(coords) {
+  public setOrigin(coords: MapCoordonates) {
     this.originSubject.next(coords);
   }
 
-  public getOrigin(): Observable<any> {
+  public getOrigin(): Observable<MapCoordonates> {
     return this.originSubject.asObservable();
   }
 
-  public setDestination(coords) {
+  public setDestination(coords: MapCoordonates) {
     this.destinationSubject.next(coords);
   }
 
-  public getDestination(): Observable<any> {
+  public getDestination(): Observable<MapCoordonates> {
     return this.destinationSubject.asObservable();
   }
 
@@ -180,12 +181,15 @@ export class MapService {
     console.log("Calculating");
     var url = 'http://localhost:3000/routes';
 
+    let origin = new MapCoordonates(this.originSubject.getValue().lat, this.originSubject.getValue().lng);
+    let destination = new MapCoordonates(this.destinationSubject.getValue().lat, this.destinationSubject.getValue().lng);
+
     this.httpClient.get(url, {
       params: {
-        sPtLat: this.originSubject.getValue().lat,
-        sPtLng: this.originSubject.getValue().lng,
-        ePtLat: this.destinationSubject.getValue().lat,
-        ePtLng: this.destinationSubject.getValue().lng
+        sPtLat: origin.lat.toString(),
+        sPtLng: origin.lng.toString(),
+        ePtLat: destination.lat.toString(),
+        ePtLng: destination.lng.toString()
       }
     }).subscribe(data => { this.routeResult.next(data); console.log(data); });
   }
