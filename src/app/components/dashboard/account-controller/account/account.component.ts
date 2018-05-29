@@ -10,14 +10,14 @@ import { UserService } from '../../../../services/user.service';
 })
 export class AccountComponent implements OnInit {
 
-  email: string = null;
-  password: string = null;
-  name: string = null;
-  createNewAccount: boolean = null;
-  userToken: string = null;
-  isUserAuthenticated: boolean;
-  userSavedRoutes = [];
-  userTrees = [];
+  private email:               string = null;
+  private password:            string = null;
+  private name:                string = null;
+  private createNewAccount:    boolean = null;
+  private userToken:           string = null;
+  private isUserAuthenticated: boolean;
+  private userSavedRoutes = [];
+  private userTrees = [];
 
   constructor(private _userService: UserService) {
     this.createNewAccount = false;
@@ -46,23 +46,23 @@ export class AccountComponent implements OnInit {
     })
   }
 
-  onLogin() {
+  private onLogin(): void {
     this._userService.loginUser(this.email, this.password);
     this.email = this.password = '';
   }
 
-  onLogOut() {
+  private onLogOut(): void {
     this._userService.logOutUser();
   }
 
-  switchToNewAccountView() {
+  private switchToNewAccountView(): void {
     if (this.createNewAccount)
       this.createNewAccount = false;
     else
       this.createNewAccount = true;
   }
 
-  onCreateAccount() {
+  private onCreateAccount(): void {
     this._userService.createUserAccount(this.name, this.email, this.password);
   }
 

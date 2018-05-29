@@ -9,8 +9,8 @@ import { UserService } from '../../../../../services/user.service';
 })
 export class RouteDetailsDialogComponent implements OnInit {
 
-  joined: boolean;
-  response;
+  private joined: boolean;
+  private response;
 
   constructor(private _userService: UserService, public dialogRef: MatDialogRef<RouteDetailsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
@@ -19,7 +19,7 @@ export class RouteDetailsDialogComponent implements OnInit {
     this.joined = false;
   }
 
-  joinTheRoute(key) {
+  private joinTheRoute(key): void {
   	this._userService.joinPublicRoute(key).subscribe(result => {
           this.joined = true;
           this.response = result.text;

@@ -10,26 +10,26 @@ import { UserService } from '../../../services/user.service';
 })
 export class MapControllerComponent implements OnInit {
 
-  showTreesFromACategory:         FormControl;
-  showAllTreesOnMap:              FormControl;
-  showHaltsControl:               FormControl;
-  showUserTreesControl:           FormControl;
-  coordsFormGroup:                FormGroup;
-  categoryFormGroup:              FormGroup;
-  treeDetailsGroup:               FormGroup;
-  treeDescriptionFormGroup:       FormGroup;
-  categories:                     any[];
-  isUserAuthenticated:            boolean;
-  userToken:                      string;
-  selectedCategory:               string;
-  imageFile:                      File;
+  private showTreesFromACategoryControl:  FormControl;
+  private showAllTreesOnMapControl:       FormControl;
+  private showHaltsControl:               FormControl;
+  private showUserTreesControl:           FormControl;
+  private coordsFormGroup:                FormGroup;
+  private categoryFormGroup:              FormGroup;
+  private treeDetailsGroup:               FormGroup;
+  private treeDescriptionFormGroup:       FormGroup;
+  private categories:                     any[];
+  private isUserAuthenticated:            boolean;
+  private userToken:                      string;
+  private selectedCategory:               string;
+  private imageFile:                      File;
 
   constructor(private _formBuilder: FormBuilder, private _mapService: MapService, private _userService: UserService) {
 
-    this.showTreesFromACategory       = new FormControl(false);
-    this.showAllTreesOnMap            = new FormControl(true);
-    this.showHaltsControl             = new FormControl(true);
-    this.showUserTreesControl         = new FormControl(false);
+    this.showTreesFromACategoryControl   = new FormControl(false);
+    this.showAllTreesOnMapControl        = new FormControl(true);
+    this.showHaltsControl                = new FormControl(true);
+    this.showUserTreesControl            = new FormControl(false);
   }
 
   ngOnInit() {
@@ -63,12 +63,11 @@ export class MapControllerComponent implements OnInit {
     });
   }
 
-  private detectFiles(event) {
+  private detectFiles(event): void {
     this.imageFile = event.target.files[0];
-    console.log(this.imageFile);
   }
 
-  private submitTreeToDatabase() {
+  private submitTreeToDatabase(): void {
     var treeData = {
       lat: null,
       lng: null,
@@ -88,17 +87,17 @@ export class MapControllerComponent implements OnInit {
     this._mapService.addTree(treeData, token);
   }
 
-  private resetCoordPoint() {
+  private resetCoordPoint(): void {
     this.coordsFormGroup.reset();
   }
 
-  private succededInGettingUserLocation(pos) {
-       this.treeDetailsGroup.controls['latitudine'].setValue(pos.coords.latitude);
-       this.treeDetailsGroup.controls['longitudine'].setValue(pos.coords.longitude);
+  private succededInGettingUserLocation(location): void {
+       this.treeDetailsGroup.controls['latitudine'].setValue(location.coords.latitude);
+       this.treeDetailsGroup.controls['longitudine'].setValue(location.coords.longitude);
        // to do: store it somewhere
   }
 
-  private failedInGettingUserLocation() {
+  private failedInGettingUserLocation(): void {
     window.alert("Nu am putut detecta locatia actuala!");
   }
 
@@ -128,17 +127,17 @@ export class MapControllerComponent implements OnInit {
       this._mapService.setMarkersCategories(this.selectedCategory);
     }
 
-    this.showAllTreesOnMap.setValue(false);
+    this.showAllTreesOnMapControl.setValue(false);
   }
 
   private showUserTrees() {
     if (this.showUserTreesControl.value == false) {
-      this.showTreesFromACategory.setValue(false);
+      this.showTreesFromACategoryControl.setValue(false);
       this._userService.getUserTrees().subscribe(userTrees => {
         this._mapService.setMarkers(userTrees);
      })
     } else {
-      if (this.showTreesFromACategory.value == false) {
+      if (this.showTreesFromACategoryControl.value == false) {
         this.showAllTrees();
       } else {
         this.showOnlyTreesFromACategory();
@@ -146,14 +145,13 @@ export class MapControllerComponent implements OnInit {
     }
   }
 
-  private onSelectCategory(c: any) {
-    this.selectedCategory = c;
+  private onSelectCategory(category: any) {
+    this.selectedCategory = category;
     this._mapService.setMarkersCategories(this.selectedCategory);
   }
 
-  private onSelectCategoryToPlant(c: any) {
-    console.log(c);
-    this.treeDetailsGroup.controls['category'].setValue(c);
+  private onSelectCategoryToPlant(category: any) {
+    this.treeDetailsGroup.controls['category'].setValue(category);
   }
 
   private resetDescription() {
@@ -163,10 +161,10 @@ export class MapControllerComponent implements OnInit {
   private showAllTrees() {
     // to do: fix toggle
     this._mapService.notifyMarkersWithAllTrees();
-    if (this.showTreesFromACategory.value == true) {
-      this.showTreesFromACategory.setValue(false);
+    if (this.showTreesFromACategoryControl.value == true) {
+      this.showTreesFromACategoryControl.setValue(false);
     } else {
-      this.showTreesFromACategory.setValue(true);
+      this.showTreesFromACategoryControl.setValue(true);
     }
   }
 }

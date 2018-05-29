@@ -8,13 +8,13 @@
   <mat-slide-toggle [formControl]="showHaltsControl" (click)="showHalts()">Arata popasurile pe harta </mat-slide-toggle>
 </section>
 <section class="example-section">
-  <mat-slide-toggle [formControl]="showAllTreesOnMap" (click)="showAllTrees()">Arata toti pomii pe harta </mat-slide-toggle>
+  <mat-slide-toggle [formControl]="showAllTreesOnMapControl" (click)="showAllTrees()">Arata toti pomii pe harta </mat-slide-toggle>
 </section>
 <section class="example-section">
-  <mat-slide-toggle [formControl]="showTreesFromACategory" (click)="showOnlyTreesFromACategory()">Arata doar pomii dintr-o categorie </mat-slide-toggle>
+  <mat-slide-toggle [formControl]="showTreesFromACategoryControl" (click)="showOnlyTreesFromACategory()">Arata doar pomii dintr-o categorie </mat-slide-toggle>
   <p>
     <mat-form-field>
-      <mat-select placeholder="Alege categoria" [disabled]="!showTreesFromACategory.value">
+      <mat-select placeholder="Alege categoria" [disabled]="!showTreesFromACategoryControl.value">
         <mat-option *ngFor="let c of categories; let i = index" [value]="1" (click)="onSelectCategory(c)">
           {{c}}
         </mat-option>

@@ -17,17 +17,16 @@ import 'rxjs/add/operator/first';
 })
 export class RouteControllerComponent implements OnInit {
 
-  isLinear = false;
-  routeFormGroup: FormGroup;
-  categories: any[] = [];
-  treesCounterToVisit = [];
-  haltsCounterToVisit = [];
-  treesMarkedToVisit;
-  haltsOccurence = [];
-  isUserAuthenticated: boolean;
-  distance;
-  makeRoutePublic: boolean = false;
-  userName;
+  private routeFormGroup: FormGroup;
+  private categories: any[] = [];
+  private treesCounterToVisit = [];
+  private haltsCounterToVisit = [];
+  private treesMarkedToVisit;
+  private haltsOccurence = [];
+  private isUserAuthenticated: boolean;
+  private distance;
+  private makeRoutePublic: boolean = false;
+  private userName;
 
   constructor(private _formBuilder: FormBuilder, private _mapService: MapService, private _userService: UserService) {
 
@@ -118,17 +117,17 @@ export class RouteControllerComponent implements OnInit {
 
   }
 
-  resetStartPoint() {
+  private resetStartPoint(): void {
     this.routeFormGroup.controls['latStr'].reset();
     this.routeFormGroup.controls['lngStr'].reset();
   }
 
-  resetEndPoint() {
+  private resetEndPoint(): void {
     this.routeFormGroup.controls['latEnd'].reset();
     this.routeFormGroup.controls['lngEnd'].reset();
   }
 
-  markStartPoint() {
+  private markStartPoint(): void {
     this._mapService.pointClickedOnMap.first().subscribe(data => {
        this.routeFormGroup.controls['latStr'].setValue(data.coords.lat);
        this.routeFormGroup.controls['lngStr'].setValue(data.coords.lng);
@@ -136,7 +135,7 @@ export class RouteControllerComponent implements OnInit {
     })
   }
 
-  markEndPoint() {
+  private markEndPoint(): void {
     this._mapService.pointClickedOnMap.first().subscribe(data => {
        this.routeFormGroup.controls['latEnd'].setValue(data.coords.lat);
        this.routeFormGroup.controls['lngEnd'].setValue(data.coords.lng);
@@ -144,11 +143,11 @@ export class RouteControllerComponent implements OnInit {
     })
   }
 
-  generateRoute() {
+  private generateRoute(): void {
     this._mapService.calculateRoute();
   }
 
-  saveRoute() {
+  private saveRoute(): void {
 
     let origin: MapCoordonates = new MapCoordonates(this.routeFormGroup.controls['latStr'].value, this.routeFormGroup.controls['lngStr'].value);
     let destin = new MapCoordonates(this.routeFormGroup.controls['latEnd'].value, this.routeFormGroup.controls['lngEnd'].value);
@@ -174,7 +173,7 @@ export class RouteControllerComponent implements OnInit {
     this._userService.saveUserRoute(route);
   }
 
-  transformPointsToCoords() {
+  private transformPointsToCoords() {
     let arr = [];
 
     this.treesMarkedToVisit.forEach(function(data) {

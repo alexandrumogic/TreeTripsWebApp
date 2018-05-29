@@ -7,7 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  constructor() { }
+  private title: string;
+
+  constructor() {
+  	this.title = "Tree Trips";
+  }
 
   ngOnInit() {
   }

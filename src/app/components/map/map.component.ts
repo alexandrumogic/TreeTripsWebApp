@@ -17,16 +17,16 @@ declare var google: any;
 })
 export class MapComponent {
 
-  lat:            number;
-  lng:            number;
-  zoom:           number;
-  trees:          Tree[];
-  halts:          Halt[];
-  origin:         MapCoordonates;
-  destination:    MapCoordonates;
-  waypoints =     [];
-  infoWindowOpened;
-  pointsMarkedToVisit;
+  private lat:            number;
+  private lng:            number;
+  private zoom:           number;
+  private trees:          Tree[];
+  private halts:          Halt[];
+  private origin:         MapCoordonates;
+  private destination:    MapCoordonates;
+  private waypoints =     [];
+  private infoWindowOpened;
+  private pointsMarkedToVisit;
 
   @ViewChild(DirectionsMapDirective) vc: DirectionsMapDirective;
 
@@ -77,17 +77,18 @@ export class MapComponent {
     this.closeInfoWindow();
   }
 
-  private checkCoordsAndReturnPoint(coords) {
+  private checkCoordsAndReturnPoint(coordonates: MapCoordonates) {
     for (var i = 0; i < this.pointsMarkedToVisit.length; i++)
-      if ((this.pointsMarkedToVisit[i].coords.lat == coords.lat) && (this.pointsMarkedToVisit[i].coords.lng == coords.lng)){
-        console.log(this.pointsMarkedToVisit[i]);
+      if ((this.pointsMarkedToVisit[i].coords.lat == coordonates.lat) && (this.pointsMarkedToVisit[i].coords.lng == coordonates.lng)){
+
         return this.pointsMarkedToVisit[i];
       }
     return null;
   }
 
   private markToVisit(marker, event): void {
-    var findIfMarked = this.checkCoordsAndReturnPoint(marker.coords);
+    let coordonates = new MapCoordonates(marker.coords.lat, marker.coords.lng);
+    var findIfMarked = this.checkCoordsAndReturnPoint(coordonates);
 
     if(event.srcElement.innerHTML == 'Viziteaza' ){
       event.srcElement.innerHTML = 'Nu mai vizita';
@@ -99,13 +100,11 @@ export class MapComponent {
       this.pointsMarkedToVisit.push(marker);
       this.mapService.setPointsMarkedToVisit(this.pointsMarkedToVisit);
       console.log("map.component / markToVisit() : Tree marked to visit;");
-      console.log(this.pointsMarkedToVisit);
     } else {
       console.log("map.component / markToVisit() : Tree already marked to visit, removing;");
       var index = this.pointsMarkedToVisit.indexOf(marker);
       this.pointsMarkedToVisit.splice(index, 1);
       this.mapService.setPointsMarkedToVisit(this.pointsMarkedToVisit);
-      console.log(this.pointsMarkedToVisit);
     }
   }
 

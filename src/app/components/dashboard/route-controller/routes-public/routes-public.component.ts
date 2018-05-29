@@ -11,10 +11,10 @@ import { RouteDetailsDialogComponent } from './route-details-dialog/route-detail
 })
 export class RoutesPublicComponent implements OnInit {
 
-  isUserAuthenticated: boolean;
-  publicRoutes = [];
-  displayedColumns = ['date', 'distance', 'trees', 'halts', 'action'];
-  dataSource = [];
+  private isUserAuthenticated: boolean;
+  private publicRoutes = [];
+  private displayedColumns = ['date', 'distance', 'trees', 'halts', 'action'];
+  private dataSource = [];
 
   constructor(private _mapService: MapService, public dialog: MatDialog) { }
 
@@ -33,26 +33,26 @@ export class RoutesPublicComponent implements OnInit {
     });
   }
 
-  showRoute(element) {
-    this._mapService.setOrigin(element.value.origin);
-    this._mapService.setDestination(element.value.destination);
-    this._mapService.setWaypoints(element.value.waypoints);
+  private showRoute(route): void {
+    this._mapService.setOrigin(route.value.origin);
+    this._mapService.setDestination(route.value.destination);
+    this._mapService.setWaypoints(route.value.waypoints);
     this._mapService.calculateRoute();
   }
 
-  showDetails(element) {
-    let participantsArray = Object.keys(element.value.participants).map(function(key) {
-      return element.value.participants[key];
+  private showDetails(route): void {
+    let participantsArray = Object.keys(route.value.participants).map(function(key) {
+      return route.value.participants[key];
     });
     
     let dialogRef = this.dialog.open(RouteDetailsDialogComponent, {
       width: '300px',
       data: { 
-        data: element.value.date,
-        info: element.value.info,
-        organizer: element.value.organizer,
+        data: route.value.date,
+        info: route.value.info,
+        organizer: route.value.organizer,
         participants: participantsArray,
-        key: element.key
+        key: route.key
        }
     });
 

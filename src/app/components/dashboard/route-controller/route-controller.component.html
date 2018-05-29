@@ -4,7 +4,7 @@
       <ng-template mat-tab-label>
         <i class="material-icons">near_me</i> Generare traseu
       </ng-template>
-      <mat-vertical-stepper [linear]="isLinear" #stepper="matVerticalStepper">
+      <mat-vertical-stepper #stepper="matVerticalStepper">
         <mat-step [stepControl]="routeFormGroup">
           <form [formGroup]="routeFormGroup">
             <ng-template matStepLabel>Punct de plecare</ng-template>

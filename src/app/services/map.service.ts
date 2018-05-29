@@ -135,8 +135,8 @@ export class MapService {
     return this.markersSubject.asObservable();
   }
 
-  public setMarkers(data) {
-    this.markersSubject.next(data);
+  public setMarkers(markers) {
+    this.markersSubject.next(markers);
   }
 
   public setMarkersCategories(category: any) {

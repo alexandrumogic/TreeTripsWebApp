@@ -9,10 +9,10 @@ import { MapService } from '../../../../services/map.service';
 })
 export class RoutesSavedComponent implements OnInit {
 
-  isUserAuthenticated: boolean;
-  userRoutes = [];
-  displayedColumns = ['date', 'distance', 'trees', 'halts', 'action'];
-  dataSource = [];
+  private isUserAuthenticated: boolean;
+  private userRoutes = [];
+  private displayedColumns = ['date', 'distance', 'trees', 'halts', 'action'];
+  private dataSource = [];
 
   constructor(private _userService: UserService, private _mapService: MapService) { }
 
@@ -35,15 +35,15 @@ export class RoutesSavedComponent implements OnInit {
     })
   }
 
-  showRoute(element) {
-    this._mapService.setOrigin(element.value.origin);
-    this._mapService.setDestination(element.value.destination);
-    this._mapService.setWaypoints(element.value.waypoints);
+  private showRoute(route) {
+    this._mapService.setOrigin(route.value.origin);
+    this._mapService.setDestination(route.value.destination);
+    this._mapService.setWaypoints(route.value.waypoints);
     this._mapService.calculateRoute();
   }
 
-  deleteRoute(element) {
-    this._userService.deleteUserRoute(element.key);
+  private deleteRoute(route) {
+    this._userService.deleteUserRoute(route.key);
   }
 
 }
